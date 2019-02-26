@@ -10,12 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class EncoderTestCmd extends Command {
-  private int count = 0;
-
-  public EncoderTestCmd() {
-    requires(Robot.encoderTest);
-    Robot.encoderTest.resetEncoder();
+public class TalonMoveUpCmd extends Command {
+  public TalonMoveUpCmd() {
+    requires(Robot.encodedTalon);
   }
 
   // Called just before this Command runs the first time
@@ -26,10 +23,8 @@ public class EncoderTestCmd extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if( (count % 10) == 0) {
-      Robot.encoderTest.LogValues();
-    }
-    count++;
+    Robot.Log("TalonMoveUpCmd: calling up");
+    Robot.encodedTalon.Up();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -41,6 +36,8 @@ public class EncoderTestCmd extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.Log("TalonMoveUpCmd: calling stop");
+    Robot.encodedTalon.Stop();
   }
 
   // Called when another command which requires one or more of the same

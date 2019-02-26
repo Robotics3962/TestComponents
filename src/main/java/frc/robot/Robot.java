@@ -35,6 +35,9 @@ public class Robot extends TimedRobot {
   public static EncoderTest encoderTest = null;
   public static TalonEncoded encodedTalon = null;
 
+  public static void Log(String msg){
+    System.out.println(msg);
+  }
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.

@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
@@ -113,21 +114,21 @@ public class TalonEncoded extends Subsystem {
     motor1.setNeutralMode(NeutralMode.Brake);
     motor2.setNeutralMode(NeutralMode.Brake);
 
-    System.out.println("Talon is initialized");
+    Robot.Log("Talon is initialized");
   }
 
   public void setPIDPosition(double pos) {
     if(!encodersAreEnabled){
       die();
     }
-    System.out.println("setPidPosition:" + pos);
+    Robot.Log("setPidPosition:" + pos);
     targetPosition = pos;
     move();
   }
 
   public void setTalonSpeed(double val){
     velocity = val;
-    System.out.println("SetTalonSpeed:" + velocity);
+    Robot.Log("SetTalonSpeed:" + velocity);
     motor1.set(ControlMode.PercentOutput, velocity);  
   }
 
@@ -157,7 +158,7 @@ public class TalonEncoded extends Subsystem {
     // because it is done asynchronously. Have a command call encoderResetComplete()
     // until it returns true 
     motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_RESET_TIMEOUT);
-    System.out.println("talon encoders reset");
+    Robot.Log("talon encoders reset");
     return true;
   }
 
@@ -177,7 +178,7 @@ public class TalonEncoded extends Subsystem {
     // a range
     if (getCurrentPosition() == 0){
       complete = true;
-      System.out.println("Talon encoder is at 0");
+      Robot.Log("Talon encoder is at 0");
     }
     return complete;
   }
@@ -188,7 +189,7 @@ public class TalonEncoded extends Subsystem {
     }
 
     double currpos = motor1.getSelectedSensorPosition(0);
-    System.out.println("Talon: currposition(" + currpos + ")");
+    Robot.Log("Talon: currposition(" + currpos + ")");
     return currpos;
   }
 
@@ -204,7 +205,7 @@ public class TalonEncoded extends Subsystem {
     if(!encodersAreEnabled){
       die();
     }
-    System.out.println("moving to target position:" + targetPosition);
+    Robot.Log("moving to target position:" + targetPosition);
     isMoving = true;
     motor1.set(ControlMode.MotionMagic, targetPosition);
   }
@@ -223,7 +224,7 @@ public class TalonEncoded extends Subsystem {
     aboveRange = curpos > (targetPosition + RobotMap.TalonAbsTolerance);
 
     reachedTarget = ((!belowRange) && (!aboveRange));
-    System.out.println("OnTarget:" + reachedTarget + " (" + belowRange + "," + aboveRange + ")");
+    Robot.Log("OnTarget:" + reachedTarget + " (" + belowRange + "," + aboveRange + ")");
     return reachedTarget;
   }
 
@@ -231,12 +232,13 @@ public class TalonEncoded extends Subsystem {
   }
 
   public void Up(){
+    //Robot.Log("TalonEncoded: reached up");
     if (atUpperLimit()){
       stop();
     }
     else {
       setTalonSpeed(RobotMap.TalonUpSpeed);
-      System.out.println("talon moving up");
+      Robot.Log("pos:" + getCurrentPosition());
     }
   }
 
@@ -246,8 +248,8 @@ public class TalonEncoded extends Subsystem {
     }
     else {
       setTalonSpeed(RobotMap.TalonDownSpeed);
-      System.out.println("talon moving down");
-        }
+      Robot.Log("pos:" + getCurrentPosition());
+    }
   }
 
   public void Stop(){
@@ -266,7 +268,7 @@ public class TalonEncoded extends Subsystem {
   }
 
   public void dumpLimitSwitchValues(){
-    System.out.println("talon: atLowerLimit:" + atLowerLimit() + " atUpperLimit:" + atUpperLimit());
+    Robot.Log("talon: atLowerLimit:" + atLowerLimit() + " atUpperLimit:" + atUpperLimit());
   }  
 }
 

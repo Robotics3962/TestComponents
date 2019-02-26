@@ -19,6 +19,9 @@ public class ResetTalonEncoderCmd extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.encodedTalon.resetEncoder();
+    Robot.Log("encoder reset");
+    System.out.println("DJD");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -29,7 +32,9 @@ public class ResetTalonEncoderCmd extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Robot.encodedTalon.encoderResetComplete();
+    boolean done = Robot.encodedTalon.encoderResetComplete();
+    Robot.Log("reset finishd:" + done);
+    return done;
   }
 
   // Called once after isFinished returns true

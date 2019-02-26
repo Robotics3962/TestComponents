@@ -11,6 +11,8 @@ import frc.robot.commands.EncoderTestCmd;
 import frc.robot.commands.LimitSwitchTestCmd;
 import frc.robot.commands.ResetTalonEncoderCmd;
 import frc.robot.commands.TalonPIDMove;
+import frc.robot.commands.TalonMoveDownCmd;
+import frc.robot.commands.TalonMoveUpCmd;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -30,10 +32,16 @@ public class OI {
     buttonB.whileHeld(new EncoderTestCmd());
 
     JoystickButton buttonX = new JoystickButton(joystick, RobotMap.JoystickButtonX);
-    buttonA.whileHeld(new ResetTalonEncoderCmd());
+    buttonX.whenPressed(new ResetTalonEncoderCmd());
 
     JoystickButton buttonY = new JoystickButton(joystick, RobotMap.JoystickButtonY);
-    buttonB.whileHeld(new EncoderTestCmd());
+    buttonY.whenPressed(new TalonPIDMove(300));
+
+    JoystickButton buttonLS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderLeft);
+    buttonLS.whileHeld(new TalonMoveDownCmd());
+
+    JoystickButton buttonRS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderRight);
+    buttonRS.whileHeld(new TalonMoveUpCmd());
 
   }
 }
