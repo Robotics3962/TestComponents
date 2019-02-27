@@ -26,16 +26,16 @@ public class OI {
 
   public OI() {     
     JoystickButton buttonA = new JoystickButton(joystick, RobotMap.JoystickButtonA);
-    buttonA.whileHeld(new LimitSwitchTestCmd());
+    buttonA.whenPressed(new EncoderTestCmd());
 
     JoystickButton buttonB = new JoystickButton(joystick, RobotMap.JoystickButtonB);
-    buttonB.whileHeld(new EncoderTestCmd());
+    buttonB.whenPressed(new TalonPIDMove(-200));
 
     JoystickButton buttonX = new JoystickButton(joystick, RobotMap.JoystickButtonX);
     buttonX.whenPressed(new ResetTalonEncoderCmd());
 
     JoystickButton buttonY = new JoystickButton(joystick, RobotMap.JoystickButtonY);
-    buttonY.whenPressed(new TalonPIDMove(300));
+    buttonY.whenPressed(new TalonPIDMove(-300));
 
     JoystickButton buttonLS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderLeft);
     buttonLS.whileHeld(new TalonMoveDownCmd());

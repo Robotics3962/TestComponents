@@ -20,8 +20,7 @@ public class ResetTalonEncoderCmd extends Command {
   @Override
   protected void initialize() {
     Robot.encodedTalon.resetEncoder();
-    Robot.Log("encoder reset");
-    System.out.println("DJD");
+    Robot.Log("EncoderResetCommand: reset started");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -33,7 +32,7 @@ public class ResetTalonEncoderCmd extends Command {
   @Override
   protected boolean isFinished() {
     boolean done = Robot.encodedTalon.encoderResetComplete();
-    Robot.Log("reset finishd:" + done);
+    Robot.Log("EncoderResetCommand: reset finishd:" + done);
     return done;
   }
 

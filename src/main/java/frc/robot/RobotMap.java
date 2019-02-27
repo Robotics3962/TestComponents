@@ -44,20 +44,20 @@ public class RobotMap {
   public static final int SparkMotorId2 = 6;
 
   // these are CAN bus ids
-  public static final int TalonMotorCanId1 = 6;
-  public static final int TalonMotorCanId2 = 5;
+  public static final int TalonMotorCanId1 = 8;
+  public static final int TalonMotorCanId2 = 7;
   public static final double TalonMinOutput = -0.5;
-  public static final double TalonMaxOutput = 1.0;
+  public static final double TalonMaxOutput = 0.5;
 
-  public static final double TalonPID_P = 0.2;
+  public static final double TalonPID_P = 4; //0.2;
   public static final double TalonPID_I = 0.0;
   public static final double TalonPID_D = 0.0;
   public static final double TalonPID_F = 0.2;
   public static final int    TalonCruiseSpeed = 15000;
   public static final int    TalonAcceleration = 6000;
   public static final double TalonAbsTolerance = 5;
-  public static final double TalonUpSpeed = -0.5;
-  public static final double TalonDownSpeed = 0.3;
+  public static final double TalonUpSpeed = -0.1;
+  public static final double TalonDownSpeed = 0.2;
   // Joystick to use
   public static final int JoystickId = 0;
 

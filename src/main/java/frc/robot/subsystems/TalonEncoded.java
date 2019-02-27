@@ -146,6 +146,7 @@ public class TalonEncoded extends Subsystem {
       die();
     }
 
+    stop();
     // make sure motor is stopped when this is called
     // if we are driving the Wrist, the reset point will
     // be indeterminate, we don't want to call this while
@@ -206,7 +207,7 @@ public class TalonEncoded extends Subsystem {
       die();
     }
     Robot.Log("moving to target position:" + targetPosition);
-    isMoving = true;
+    //isMoving = true;
     motor1.set(ControlMode.MotionMagic, targetPosition);
   }
 
@@ -228,6 +229,10 @@ public class TalonEncoded extends Subsystem {
     return reachedTarget;
   }
 
+  public void logEncoderValues(){
+    Robot.Log("Talon current pos:" + getCurrentPosition());
+  }
+
   public void initDefaultCommand(){
   }
 
@@ -238,7 +243,7 @@ public class TalonEncoded extends Subsystem {
     }
     else {
       setTalonSpeed(RobotMap.TalonUpSpeed);
-      Robot.Log("pos:" + getCurrentPosition());
+      logEncoderValues();
     }
   }
 
@@ -248,12 +253,13 @@ public class TalonEncoded extends Subsystem {
     }
     else {
       setTalonSpeed(RobotMap.TalonDownSpeed);
-      Robot.Log("pos:" + getCurrentPosition());
+      logEncoderValues();
     }
   }
 
   public void Stop(){
     stop();
+    logEncoderValues();
   }
 
    public boolean atUpperLimit(){
