@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.LimitSwitchTest;
+import frc.robot.subsystems.ElevatorTest;
 import frc.robot.subsystems.EncoderTest;
 import frc.robot.subsystems.TalonEncoded;
 
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
   public static LimitSwitchTest limitSwitchTest = null;
   public static EncoderTest encoderTest = null;
   public static TalonEncoded encodedTalon = null;
+  public static ElevatorTest elevatorTest = null;
 
   public static void Log(String msg){
     System.out.println(msg);
@@ -49,6 +51,7 @@ public class Robot extends TimedRobot {
     limitSwitchTest = new LimitSwitchTest();
     encoderTest = new EncoderTest();
     encodedTalon = new TalonEncoded();
+    elevatorTest = new ElevatorTest();
 
     // call control loop
     m_oi = new OI();

@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import frc.robot.commands.ElevatorUpCmd;
+import frc.robot.commands.ElevatorDownCmd;
 import frc.robot.commands.EncoderTestCmd;
 import frc.robot.commands.LimitSwitchTestCmd;
 import frc.robot.commands.ResetTalonEncoderCmd;
@@ -26,7 +28,7 @@ public class OI {
 
   public OI() {     
     JoystickButton buttonA = new JoystickButton(joystick, RobotMap.JoystickButtonA);
-    buttonA.whenPressed(new EncoderTestCmd());
+    buttonA.whileHeld(new EncoderTestCmd());       //(new TalonPIDMove(-100));
 
     JoystickButton buttonB = new JoystickButton(joystick, RobotMap.JoystickButtonB);
     buttonB.whenPressed(new TalonPIDMove(-200));
@@ -38,10 +40,10 @@ public class OI {
     buttonY.whenPressed(new TalonPIDMove(-300));
 
     JoystickButton buttonLS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderLeft);
-    buttonLS.whileHeld(new TalonMoveDownCmd());
+    buttonLS.whileHeld(new ElevatorDownCmd());
 
     JoystickButton buttonRS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderRight);
-    buttonRS.whileHeld(new TalonMoveUpCmd());
+    buttonRS.whileHeld(new ElevatorUpCmd());
 
   }
 }

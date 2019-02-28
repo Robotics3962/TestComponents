@@ -17,8 +17,8 @@ public class RobotMap {
   // These are PIO ids
 
   //Encoder 1
-  public static final int EncoderPIOId1 = 8;
-  public static final int EncoderPIOId2 = 9;  
+  public static final int EncoderPIOId1 = 5;
+  public static final int EncoderPIOId2 = 6;  
 
   /* Below added by Ian
   * I added these to give the capability to test multiple encoders or switch out which encoders
@@ -52,12 +52,18 @@ public class RobotMap {
   public static final double TalonPID_P = 4; //0.2;
   public static final double TalonPID_I = 0.0;
   public static final double TalonPID_D = 0.0;
-  public static final double TalonPID_F = 0.2;
+  public static final double TalonPID_F = 0.0;
   public static final int    TalonCruiseSpeed = 15000;
   public static final int    TalonAcceleration = 6000;
   public static final double TalonAbsTolerance = 5;
-  public static final double TalonUpSpeed = -0.1;
-  public static final double TalonDownSpeed = 0.2;
+  public static final double TalonUpSpeed = -.3;
+  public static final double TalonDownSpeed = .3;
+
+  // test elevator values
+  public static final int SparkElevator = 5;
+  public static final double ElevatorUpSpeed = -.4;
+  public static final double ElevatorDownSpeed = .4;
+
   // Joystick to use
   public static final int JoystickId = 0;
 
