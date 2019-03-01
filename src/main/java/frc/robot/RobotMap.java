@@ -26,12 +26,9 @@ public class RobotMap {
   */
 
   //Encoder 2
-  public static final int EncoderPIOId3 = 1; //don't think this is being used
-  public static final int EncoderPIOId4 = 2;
+  public static final int EncoderPIOId3 = 7; 
+  public static final int EncoderPIOId4 = 8;
  
-  //Encoder 3
-  public static final int EncoderPIOId5 = 3;
-  public static final int EncoderPIOId6 = 6;
 
   /* End of Edit */
 
@@ -46,6 +43,8 @@ public class RobotMap {
   // these are CAN bus ids
   public static final int TalonMotorCanId1 = 8;
   public static final int TalonMotorCanId2 = 7;
+  public static final int TalonMotorCanID3 = 6;
+  public static final int TalonMotorCanID4 = 5;
   public static final double TalonMinOutput = -0.5;
   public static final double TalonMaxOutput = 0.5;
 
