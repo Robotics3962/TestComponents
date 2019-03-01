@@ -31,6 +31,8 @@ public class TalonEncoded extends Subsystem {
 
   private TalonSRX motor1;
   private TalonSRX motor2;
+  private TalonSRX motor3;
+  private TalonSRX motor4;
   private double targetPosition;
   private double velocity;
   private boolean isMoving; 
@@ -61,6 +63,8 @@ public class TalonEncoded extends Subsystem {
     // assume that motor1 is connected to encoder
     motor1 = new TalonSRX(RobotMap.TalonMotorCanId1);
     motor2= new TalonSRX(RobotMap.TalonMotorCanId2); 
+    motor3 = new TalonSRX(RobotMap.TalonMotorCanID3);
+    motor4 = new TalonSRX(RobotMap.TalonMotorCanID4);
 
     motor1.configFactoryDefault();
     motor2.configFactoryDefault();
