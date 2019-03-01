@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.LimitSwitchTest;
 import frc.robot.subsystems.ElevatorTest;
 import frc.robot.subsystems.EncoderTest;
-import frc.robot.subsystems.TalonEncoded;
+import frc.robot.subsystems.TalonEncodedArm;
+import frc.robot.subsystems.TalonEncodedWrist;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -34,7 +36,8 @@ public class Robot extends TimedRobot {
   // subsystems
   public static LimitSwitchTest limitSwitchTest = null;
   public static EncoderTest encoderTest = null;
-  public static TalonEncoded encodedTalon = null;
+  public static TalonEncodedArm encodedArmTalon = null;
+  public static TalonEncodedWrist encodedWristTalon = null;
   public static ElevatorTest elevatorTest = null;
 
   public static void Log(String msg){
@@ -50,7 +53,7 @@ public class Robot extends TimedRobot {
     // create subsystems
     limitSwitchTest = new LimitSwitchTest();
     encoderTest = new EncoderTest();
-    encodedTalon = new TalonEncoded();
+    encodedArmTalon = new TalonEncodedArm();
     elevatorTest = new ElevatorTest();
 
     // call control loop

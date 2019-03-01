@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
 
@@ -20,8 +21,12 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class TalonEncoded extends Subsystem {
-
+/**
+ * Add your docs here.
+ */
+public class TalonEncodedWrist extends Subsystem {
+  // Put methods for controlling this subsystem
+  // here. Call these from Commands.
   private static final int ENCODER_SLOT_INDEX = 0;
   private static final int PRIMARY_ENCODER_IDX = 0;
   private static final int ENCODER_RESET_POSTION = 0;
@@ -29,8 +34,6 @@ public class TalonEncoded extends Subsystem {
   private static final int ENCODER_CONFIG_TIMEOUT = 10;
   private static final int TALONRSX_TIMEOUT = 10;
 
-  private TalonSRX motor1;
-  private TalonSRX motor2;
   private TalonSRX motor3;
   private TalonSRX motor4;
   private double targetPosition;
@@ -52,7 +55,7 @@ public class TalonEncoded extends Subsystem {
     int u = 1/x;
   }
 
-  public TalonEncoded() {
+  public TalonEncodedWrist() {
     encodersAreEnabled = true;
     limitSwAreEnabled = false;
 
@@ -61,62 +64,62 @@ public class TalonEncoded extends Subsystem {
     velocity = 0;
 
     // assume that motor1 is connected to encoder
-    motor1 = new TalonSRX(RobotMap.TalonMotorCanId1);
-    motor2= new TalonSRX(RobotMap.TalonMotorCanId2); 
+    
     motor3 = new TalonSRX(RobotMap.TalonMotorCanID3);
     motor4 = new TalonSRX(RobotMap.TalonMotorCanID4);
 
-    motor1.configFactoryDefault();
-    motor2.configFactoryDefault();
+    motor3.configFactoryDefault();
+    motor4.configFactoryDefault();
 
-    // only 1 controller (motor1) is wired to the encoder, so we have motor2
+     // only 1 controller (motor1) is wired to the encoder, so we have motor2
     // follow motor1 to keep it moving at the same speed
-    motor2.follow(motor1);
+    motor4.follow(motor3);
     
 		/* Set the peak and nominal outputs */
-		motor1.configNominalOutputForward(0, TALONRSX_TIMEOUT);
-		motor1.configNominalOutputReverse(0, TALONRSX_TIMEOUT);
-		motor1.configPeakOutputForward(RobotMap.TalonMaxOutput, TALONRSX_TIMEOUT);
-    motor1.configPeakOutputReverse(RobotMap.TalonMinOutput, TALONRSX_TIMEOUT);
+		motor3.configNominalOutputForward(0, TALONRSX_TIMEOUT);
+		motor4.configNominalOutputReverse(0, TALONRSX_TIMEOUT);
+		motor3.configPeakOutputForward(RobotMap.TalonMaxOutput, TALONRSX_TIMEOUT);
+    motor3.configPeakOutputReverse(RobotMap.TalonMinOutput, TALONRSX_TIMEOUT);
 
     // this could be either true or false, we have to determine
     // how it is confgured
-    motor1.setInverted(false);
-    motor2.setInverted(false);
+    motor3.setInverted(false);
+    motor4.setInverted(false);
 
     if (encodersAreEnabled) {
       // init code pulled from https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/MotionMagic/src/main/java/frc/robot/Robot.java
 
       /* Configure Sensor Source for Pirmary PID */
-      motor1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,	
+      motor3.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,	
           PRIMARY_ENCODER_IDX, 
           ENCODER_CONFIG_TIMEOUT);
 
-      motor1.setSensorPhase(true);
+      motor3.setSensorPhase(true);
 
       /* Set relevant frame periods to be at least as fast as periodic rate */
       /* DJD I don't know what this does                                    */
-		  motor1.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, ENCODER_CONFIG_TIMEOUT);
-		  motor1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, ENCODER_CONFIG_TIMEOUT);
+		  motor3.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, ENCODER_CONFIG_TIMEOUT);
+		  motor3.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, ENCODER_CONFIG_TIMEOUT);
 
       /* Set Motion Magic gains in slot0 - see documentation */
-      motor1.selectProfileSlot(ENCODER_SLOT_INDEX, PRIMARY_ENCODER_IDX);
+      motor3.selectProfileSlot(ENCODER_SLOT_INDEX, PRIMARY_ENCODER_IDX);
 
-      motor1.config_kF(0, RobotMap.TalonPID_F, ENCODER_CONFIG_TIMEOUT);
-      motor1.config_kP(0, RobotMap.TalonPID_P, ENCODER_CONFIG_TIMEOUT);
-      motor1.config_kI(0, RobotMap.TalonPID_I, ENCODER_CONFIG_TIMEOUT);
-      motor1.config_kD(0, RobotMap.TalonPID_D, ENCODER_CONFIG_TIMEOUT);
+      //change these parameters
+      motor3.config_kF(0, RobotMap.TalonPID_F, ENCODER_CONFIG_TIMEOUT);
+      motor3.config_kP(0, RobotMap.TalonPID_P, ENCODER_CONFIG_TIMEOUT);
+      motor3.config_kI(0, RobotMap.TalonPID_I, ENCODER_CONFIG_TIMEOUT);
+      motor3.config_kD(0, RobotMap.TalonPID_D, ENCODER_CONFIG_TIMEOUT);
   
   		/* Set acceleration and vcruise velocity - see documentation */
-		  motor1.configMotionCruiseVelocity(RobotMap.TalonCruiseSpeed, ENCODER_CONFIG_TIMEOUT);
-		  motor1.configMotionAcceleration(RobotMap.TalonAcceleration, ENCODER_CONFIG_TIMEOUT);
+		  motor3.configMotionCruiseVelocity(RobotMap.TalonCruiseSpeed, ENCODER_CONFIG_TIMEOUT);
+		  motor3.configMotionAcceleration(RobotMap.TalonAcceleration, ENCODER_CONFIG_TIMEOUT);
 
 		  /* Zero the sensor */
-      motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_CONFIG_TIMEOUT);
+      motor3.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_CONFIG_TIMEOUT);
     }
 
-    motor1.setNeutralMode(NeutralMode.Brake);
-    motor2.setNeutralMode(NeutralMode.Brake);
+    motor3.setNeutralMode(NeutralMode.Brake);
+    motor4.setNeutralMode(NeutralMode.Brake);
 
     Robot.Log("Talon is initialized");
   }
@@ -133,11 +136,11 @@ public class TalonEncoded extends Subsystem {
   public void setTalonSpeed(double val){
     velocity = val;
     Robot.Log("SetTalonSpeed:" + velocity);
-    motor1.set(ControlMode.PercentOutput, velocity);  
+    motor3.set(ControlMode.PercentOutput, velocity);  
   }
 
   public void stop() {
-    motor1.neutralOutput();
+    motor3.neutralOutput();
 
     // this isn't completely true as this call will start stopping
     // the motor, it may not be completely stopped for an undetermined
@@ -162,7 +165,7 @@ public class TalonEncoded extends Subsystem {
     // there is no guarantee the position will be 0 when this call returns.
     // because it is done asynchronously. Have a command call encoderResetComplete()
     // until it returns true 
-    motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_RESET_TIMEOUT);
+    motor3.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_RESET_TIMEOUT);
     Robot.Log("talon encoders reset");
     return true;
   }
@@ -193,7 +196,7 @@ public class TalonEncoded extends Subsystem {
       die();
     }
 
-    double currpos = motor1.getSelectedSensorPosition(0);
+    double currpos = motor3.getSelectedSensorPosition(0);
     Robot.Log("Talon: currposition(" + currpos + ")");
     return currpos;
   }
@@ -212,7 +215,7 @@ public class TalonEncoded extends Subsystem {
     }
     Robot.Log("moving to target position:" + targetPosition);
     //isMoving = true;
-    motor1.set(ControlMode.MotionMagic, targetPosition);
+    motor3.set(ControlMode.MotionMagic, targetPosition);
   }
 
   public boolean onTarget(){
@@ -235,9 +238,6 @@ public class TalonEncoded extends Subsystem {
 
   public void logEncoderValues(){
     Robot.Log("Talon current pos:" + getCurrentPosition());
-  }
-
-  public void initDefaultCommand(){
   }
 
   public void Up(){
@@ -280,5 +280,12 @@ public class TalonEncoded extends Subsystem {
   public void dumpLimitSwitchValues(){
     Robot.Log("talon: atLowerLimit:" + atLowerLimit() + " atUpperLimit:" + atUpperLimit());
   }  
-}
 
+  @Override
+  public void initDefaultCommand() {
+    // Set the default command for a subsystem here.
+    // setDefaultCommand(new MySpecialCommand());
+  }
+
+ 
+}

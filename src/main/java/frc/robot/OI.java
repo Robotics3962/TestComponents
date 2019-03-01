@@ -12,9 +12,11 @@ import frc.robot.commands.ElevatorDownCmd;
 import frc.robot.commands.EncoderTestCmd;
 import frc.robot.commands.LimitSwitchTestCmd;
 import frc.robot.commands.ResetTalonEncoderCmd;
-import frc.robot.commands.TalonPIDMove;
-import frc.robot.commands.TalonMoveDownCmd;
-import frc.robot.commands.TalonMoveUpCmd;
+import frc.robot.commands.TalonArmPIDMove;
+import frc.robot.commands.TalonWristMoveDownCmd;
+import frc.robot.commands.TalonWristMoveUpCmd;
+import frc.robot.commands.TalonArmMoveDownCmd;
+import frc.robot.commands.TalonArmMoveUpCmd;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -28,16 +30,16 @@ public class OI {
 
   public OI() {     
     JoystickButton buttonA = new JoystickButton(joystick, RobotMap.JoystickButtonA);
-    buttonA.whileHeld(new EncoderTestCmd());       //(new TalonPIDMove(-100));
+    buttonA.whileHeld(new TalonWristMoveUpCmd());       //(new TalonPIDMove(-100));
 
     JoystickButton buttonB = new JoystickButton(joystick, RobotMap.JoystickButtonB);
-    buttonB.whenPressed(new TalonPIDMove(-200));
+    buttonB.whileHeld(new TalonWristMoveDownCmd());
 
     JoystickButton buttonX = new JoystickButton(joystick, RobotMap.JoystickButtonX);
     buttonX.whenPressed(new ResetTalonEncoderCmd());
 
     JoystickButton buttonY = new JoystickButton(joystick, RobotMap.JoystickButtonY);
-    buttonY.whenPressed(new TalonPIDMove(-300));
+    buttonY.whenPressed(new TalonArmPIDMove(-300));
 
     JoystickButton buttonLS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderLeft);
     buttonLS.whileHeld(new ElevatorDownCmd());

@@ -9,33 +9,33 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.TalonEncoded;
+import frc.robot.subsystems.TalonEncodedArm;
 
-public class TalonPIDMove extends Command {
+public class TalonArmPIDMove extends Command {
   private double positionToMoveTo;
 
-  public TalonPIDMove(double pos) {
-    requires(Robot.encodedTalon);
+  public TalonArmPIDMove(double pos) {
+    requires(Robot.encodedArmTalon);
     positionToMoveTo = pos;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.encodedTalon.setPIDPosition(positionToMoveTo);
+    Robot.encodedArmTalon.setPIDPosition(positionToMoveTo);
     Robot.Log("TalonPidMove: initialized");
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.encodedTalon.move();
+    Robot.encodedArmTalon.move();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    boolean done = Robot.encodedTalon.onTarget();
+    boolean done = Robot.encodedArmTalon.onTarget();
     Robot.Log("TalonPidMove done:" + done);
     return done;
   }
