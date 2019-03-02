@@ -298,7 +298,7 @@ public class TalonEncodedWrist extends Subsystem {
       break;
     }
     
-    if( check && (deltaPos != 0) ){
+    if( check && (Math.abs(deltaPos) > RobotMap.EncoderSlop) ){
       double deltaPosSign = Math.copySign(1, deltaPos);
       if( deltaPosSign != sign){
         Robot.Log("Wrist encoder is out of Phase from Wrist Motor");

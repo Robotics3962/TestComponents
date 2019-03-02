@@ -68,7 +68,7 @@ public class TalonEncodedArm extends Subsystem {
 
     // assume that motor1 is connected to encoder
     motor1 = new WPI_TalonSRX(RobotMap.TalonMotorCanId1);
-    motor2= new wpI_TalonSRX(RobotMap.TalonMotorCanId2); 
+    motor2= new WPI_TalonSRX(RobotMap.TalonMotorCanId2); 
     //motor1 = new TalonSRX(RobotMap.TalonMotorCanId1);
     //motor2= new TalonSRX(RobotMap.TalonMotorCanId2); 
    
@@ -294,7 +294,7 @@ public class TalonEncodedArm extends Subsystem {
       break;
     }
 
-    if( check  && (deltaPos != 0)){
+    if( check && (Math.abs(deltaPos) > RobotMap.EncoderSlop) ){
       double deltaPosSign = Math.copySign(1, deltaPos);
       if( deltaPosSign != sign){
         Robot.Log("Arm encoder is out of Phase from Arm Motor");
