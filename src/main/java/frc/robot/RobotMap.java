@@ -14,6 +14,13 @@ package frc.robot;
  * floating around.
  */
 public class RobotMap {
+
+  // indicate what we want to test
+  public static enum TestModule {
+    LimitSwitch,Elevator,Wrist,Arm,Encoder,Custom
+  }
+  public static TestModule testModule = TestModule.Elevator;
+
   // These are PIO ids
 
   //Encoder 1
@@ -116,4 +123,7 @@ public class RobotMap {
   public static final int XboxController_Rotation = 1;
   
   public static final double JoystickDeadZone = 0.05;
+
+  // this is used to make the encoder phase check less sensitive
+  public static final double EncoderSlop = 5;
 }

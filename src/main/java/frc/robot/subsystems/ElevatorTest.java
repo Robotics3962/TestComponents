@@ -33,7 +33,7 @@ public class ElevatorTest extends Subsystem {
   public void Up(){
     motor.set(RobotMap.ElevatorUpSpeed);
     if( (count % 10) == 0) {
-     // Robot.encoderTest.LogValues();
+      Robot.encoderTest.LogValues();
     }
     count++;
 
@@ -41,7 +41,7 @@ public class ElevatorTest extends Subsystem {
   public void Down(){
     motor.set(RobotMap.ElevatorDownSpeed);
     if( (count % 10) == 0) {
-      //Robot.encoderTest.LogValues();
+      Robot.encoderTest.LogValues();
     }
     count++;
   }

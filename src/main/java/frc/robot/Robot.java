@@ -55,9 +55,6 @@ public class Robot extends TimedRobot {
   public enum Direction {
     NONE,UP,DOWN
   }
-  Direction dirMoved;
-  double pastPosition;
-
 
   // this is a divide by 0 which will 
   // throw an exception which should 
@@ -75,12 +72,28 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    // create subsystems
-    //limitSwitchTest = new LimitSwitchTest();
-    //encoderTest = new EncoderTest();
-    //encodedArmTalon = new TalonEncodedArm();
-    encodedWristTalon =  new TalonEncodedWrist();
-    //elevatorTest = new ElevatorTest();
+    // create subsystems for certain tests
+    switch(RobotMap.testModule){
+      case Custom:
+        // don't create any subsystems
+        break;
+      case LimitSwitch:
+        limitSwitchTest = new LimitSwitchTest();
+        break;
+      case Elevator:
+        elevatorTest = new ElevatorTest();
+        encoderTest = new EncoderTest();
+        break;
+      case Wrist:
+        encodedWristTalon = new TalonEncodedWrist();
+        break;
+      case Arm:
+        encodedArmTalon = new TalonEncodedArm();
+        break;
+      case Encoder:
+        encoderTest = new EncoderTest();
+        break;
+    }
 
     // call control loop
     m_oi = new OI();

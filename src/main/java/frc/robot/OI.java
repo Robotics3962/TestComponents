@@ -18,6 +18,8 @@ import frc.robot.commands.TalonWristMoveUpCmd;
 import frc.robot.commands.TalonWristPIDMove;
 import frc.robot.commands.TalonArmMoveDownCmd;
 import frc.robot.commands.TalonArmMoveUpCmd;
+import frc.robot.commands.ResetArmEncoderCmd;
+import frc.robot.commands.ResetWristEncoderCmd;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -31,26 +33,46 @@ public class OI {
 
   public OI() {     
     JoystickButton buttonA = new JoystickButton(joystick, RobotMap.JoystickButtonA);
-    //buttonA.whileHeld(new TalonWristPIDMove(100));       //(new TalonPIDMove(-100));
-    //buttonA.whileHeld(new TalonWristPIDMove(true));       //(new TalonPIDMove(-100));
-
     JoystickButton buttonB = new JoystickButton(joystick, RobotMap.JoystickButtonB);
-    //buttonB.whileHeld(new TalonWristPIDMove(200));
-    //buttonB.whileHeld(new TalonWristPIDMove(false));
-
     JoystickButton buttonX = new JoystickButton(joystick, RobotMap.JoystickButtonX);
-    //buttonX.whenPressed(new ResetTalonEncoderCmd());
-
-    //JoystickButton buttonY = new JoystickButton(joystick, RobotMap.JoystickButtonY);
-    //buttonY.whenPressed(new TalonWristPIDMove(300));
-
+    JoystickButton buttonY = new JoystickButton(joystick, RobotMap.JoystickButtonY);
     JoystickButton buttonLS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderLeft);
-    //buttonLS.whileHeld(new TalonWristMoveUpCmd());
-    buttonLS.whileHeld(new ElevatorUpCmd());
-
     JoystickButton buttonRS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderRight);
-    //buttonRS.whileHeld(new TalonWristMoveDownCmd());
-    buttonRS.whileHeld(new ElevatorDownCmd());
 
+    // map the buttons to whatever module we are testing
+    switch(RobotMap.testModule){
+      case Custom:
+        // don't create any subsystems
+        break;
+      case LimitSwitch:
+        // log the state of the limit switch
+        buttonA.whileHeld(new LimitSwitchTestCmd());
+        break;
+      case Elevator:
+        // reset the encoder (set it to 0)
+        buttonA.whenPressed(new EncoderTestCmd());
+        // manually move the elevator and log the position of the encoder
+        buttonRS.whileHeld(new ElevatorUpCmd());
+        buttonLS.whileHeld(new ElevatorDownCmd());
+        break;
+      case Wrist:
+        buttonA.whileHeld(new TalonWristPIDMove(100));
+        buttonB.whileHeld(new TalonWristPIDMove(200));
+        buttonY.whileHeld(new TalonWristPIDMove(300));
+        buttonX.whenPressed(new ResetWristEncoderCmd());
+        buttonRS.whileHeld(new TalonWristMoveUpCmd());
+        buttonLS.whileHeld(new TalonWristMoveDownCmd());
+        break;
+      case Arm:
+        buttonA.whileHeld(new TalonArmPIDMove(100));
+        buttonB.whileHeld(new TalonArmPIDMove(200));
+        buttonY.whileHeld(new TalonArmPIDMove(300));
+        buttonX.whenPressed(new ResetArmEncoderCmd());
+        buttonRS.whileHeld(new TalonArmMoveUpCmd());
+        buttonLS.whileHeld(new TalonArmMoveDownCmd());
+      break;
+      case Encoder:
+        break;
+    }
   }
 }

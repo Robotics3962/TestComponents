@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj.Encoder;
  */
 public class EncoderTest extends Subsystem {
   Encoder encoder = null;
-  Encoder encoder2 = null;
-  Encoder encoder3 = null;
 
   public EncoderTest(){
     encoder = new Encoder(RobotMap.EncoderPIOId1, RobotMap.EncoderPIOId2,false, Encoder.EncodingType.k4X);
