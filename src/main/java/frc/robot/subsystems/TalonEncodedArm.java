@@ -282,7 +282,7 @@ public class TalonEncodedArm extends Subsystem {
       return;
     }
 
-    switch(dirMoved){
+    switch(dirMoved){//direction moved
       case DOWN:
         sign = Math.copySign(1, RobotMap.TalonArmDownSpeed);
         break;
@@ -301,6 +301,7 @@ public class TalonEncodedArm extends Subsystem {
         Robot.die();
       }
     }
+    pastPosition = getCurrentPosition();
     return;
   }
 
@@ -323,8 +324,8 @@ public class TalonEncodedArm extends Subsystem {
     }
     else {
       VerifyEncoderPhase(pastPosition);
+      // do not set this before verify
       dirMoved = Robot.Direction.UP;
-      pastPosition = getCurrentPosition();
       setTalonSpeed(RobotMap.TalonArmUpSpeed);
     }
   }
@@ -335,8 +336,8 @@ public class TalonEncodedArm extends Subsystem {
     }
     else {
       VerifyEncoderPhase(pastPosition);
+      // do not set this before verify
       dirMoved = Robot.Direction.DOWN;
-      pastPosition = getCurrentPosition();
       setTalonSpeed(RobotMap.TalonArmDownSpeed);
     }
   }

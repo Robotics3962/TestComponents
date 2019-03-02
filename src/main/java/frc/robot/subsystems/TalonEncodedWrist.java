@@ -305,6 +305,8 @@ public class TalonEncodedWrist extends Subsystem {
         Robot.die();
       }
     }
+    pastPosition = getCurrentPosition();
+
     return;
   }
 
@@ -327,7 +329,6 @@ public class TalonEncodedWrist extends Subsystem {
     else {
       VerifyEncoderPhase(pastPosition);
       dirMoved = Robot.Direction.UP;
-      pastPosition = getCurrentPosition();
       setTalonSpeed(RobotMap.TalonWristUpSpeed);
     }
   }
@@ -339,7 +340,6 @@ public class TalonEncodedWrist extends Subsystem {
     else {
       VerifyEncoderPhase(pastPosition);
       dirMoved = Robot.Direction.DOWN;
-      pastPosition = getCurrentPosition();
       setTalonSpeed(RobotMap.TalonWristDownSpeed);
     }
   }
@@ -347,7 +347,7 @@ public class TalonEncodedWrist extends Subsystem {
   public void Stop(){
     dirMoved = Direction.NONE;
     // or call motor1.stopMotor();
-    setTalonSpeed(RobotMap.TalonWristStopSpeed);
+    //setTalonSpeed(RobotMap.TalonWristStopSpeed);
     stop();
   }
 
