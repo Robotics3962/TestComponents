@@ -293,7 +293,7 @@ public class TalonEncodedWrist extends Subsystem {
       case UP:
         sign = Math.copySign(1, RobotMap.TalonWristUpSpeed);
         break;
-      case NONE:
+      case NONE://also is referred to if using PID move
         check = false;
       break;
     }

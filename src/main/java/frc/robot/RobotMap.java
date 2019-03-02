@@ -19,7 +19,7 @@ public class RobotMap {
   public static enum TestModule {
     LimitSwitch,Elevator,Wrist,Arm,Encoder,Custom
   }
-  public static TestModule testModule = TestModule.Elevator;
+  public static TestModule testModule = TestModule.Elevator;//change to whatever you want to test meaning (TestModule.Elevator)
 
   // These are PIO ids
 
@@ -125,5 +125,5 @@ public class RobotMap {
   public static final double JoystickDeadZone = 0.05;
 
   // this is used to make the encoder phase check less sensitive
-  public static final double EncoderSlop = 5;
+  public static final double EncoderSlop = 1;
 }
