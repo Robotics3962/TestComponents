@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
@@ -24,7 +25,7 @@ public LimitSwitchTest(){
 
 public void LogValues()
 {
-  System.out.println("Limitswitch value is (" + limitSwitch.get() + ")");
+  Robot.Log("Limitswitch value is (" + limitSwitch.get() + ")");
 }
 
 @Override

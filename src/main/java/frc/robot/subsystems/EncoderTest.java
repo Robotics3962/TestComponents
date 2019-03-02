@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Encoder;
 
@@ -21,11 +22,6 @@ public class EncoderTest extends Subsystem {
 
   public EncoderTest(){
     encoder = new Encoder(RobotMap.EncoderPIOId1, RobotMap.EncoderPIOId2,false, Encoder.EncodingType.k4X);
-
-   // encoder2 = new Encoder(RobotMap.EncoderPIOId3, RobotMap.EncoderPIOId4, false, Encoder.EncodingType.k4X);
-
-    //encoder3 = new Encoder(RobotMap.EncoderPIOId5, RobotMap.EncoderPIOId6, false, Encoder.EncodingType.k4X);
-
   }
 
   @Override
@@ -43,24 +39,6 @@ public class EncoderTest extends Subsystem {
     boolean valS = encoder.getStopped();
     double valR = encoder.getRaw();
     double valD = encoder.getDistance();
-    System.out.println("encoder: get:" + val + " stopped:" + valS + " raw:" + valR +  " dist:" + valD);
-
-    /*
-    int val2 = encoder.get();
-    boolean valS2 = encoder.getStopped();
-    double valR2 = encoder.getRaw();
-    double valD2 = encoder.getDistance();
-    System.out.println("encoder2: get:" + val2 + " stopped:" + valS2 + " raw:" + valR2 +  " dist:" + valD2);
-
-    int val3 = encoder.get();
-    boolean valS3 = encoder.getStopped();
-    double valR3 = encoder.getRaw();
-    double valD3 = encoder.getDistance();
-    System.out.println("encoder3: get:" + val3 + " stopped:" + valS3 + " raw:" + valR3 +  " dist:" + valD3);
-*/
-
-
-
-
+    Robot.Log("encoder: get:" + val + " stopped:" + valS + " raw:" + valR +  " dist:" + valD);
   }
 }

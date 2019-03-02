@@ -15,6 +15,7 @@ import frc.robot.commands.ResetTalonEncoderCmd;
 import frc.robot.commands.TalonArmPIDMove;
 import frc.robot.commands.TalonWristMoveDownCmd;
 import frc.robot.commands.TalonWristMoveUpCmd;
+import frc.robot.commands.TalonWristPIDMove;
 import frc.robot.commands.TalonArmMoveDownCmd;
 import frc.robot.commands.TalonArmMoveUpCmd;
 import edu.wpi.first.wpilibj.Joystick;
@@ -30,22 +31,26 @@ public class OI {
 
   public OI() {     
     JoystickButton buttonA = new JoystickButton(joystick, RobotMap.JoystickButtonA);
-    buttonA.whileHeld(new TalonWristMoveUpCmd());       //(new TalonPIDMove(-100));
+    //buttonA.whileHeld(new TalonWristPIDMove(100));       //(new TalonPIDMove(-100));
+    //buttonA.whileHeld(new TalonWristPIDMove(true));       //(new TalonPIDMove(-100));
 
     JoystickButton buttonB = new JoystickButton(joystick, RobotMap.JoystickButtonB);
-    buttonB.whileHeld(new TalonWristMoveDownCmd());
+    //buttonB.whileHeld(new TalonWristPIDMove(200));
+    //buttonB.whileHeld(new TalonWristPIDMove(false));
 
     JoystickButton buttonX = new JoystickButton(joystick, RobotMap.JoystickButtonX);
-    buttonX.whenPressed(new ResetTalonEncoderCmd());
+    //buttonX.whenPressed(new ResetTalonEncoderCmd());
 
-    JoystickButton buttonY = new JoystickButton(joystick, RobotMap.JoystickButtonY);
-    buttonY.whenPressed(new TalonArmPIDMove(-300));
+    //JoystickButton buttonY = new JoystickButton(joystick, RobotMap.JoystickButtonY);
+    //buttonY.whenPressed(new TalonWristPIDMove(300));
 
     JoystickButton buttonLS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderLeft);
-    buttonLS.whileHeld(new ElevatorDownCmd());
+    //buttonLS.whileHeld(new TalonWristMoveUpCmd());
+    buttonLS.whileHeld(new ElevatorUpCmd());
 
     JoystickButton buttonRS = new JoystickButton(joystick, RobotMap.JoystickButtonShoulderRight);
-    buttonRS.whileHeld(new ElevatorUpCmd());
+    //buttonRS.whileHeld(new TalonWristMoveDownCmd());
+    buttonRS.whileHeld(new ElevatorDownCmd());
 
   }
 }

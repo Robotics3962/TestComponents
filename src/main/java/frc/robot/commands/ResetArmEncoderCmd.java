@@ -11,20 +11,16 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.subsystems.TalonEncodedArm;
 
-public class TalonWristPIDMove extends Command {
-  private double positionToMoveTo;
-
-  public TalonWristPIDMove(double pos) {
+public class ResetArmEncoderCmd extends Command {
+  public ResetArmEncoderCmd() {
     requires(Robot.encodedWristTalon);
-    positionToMoveTo = pos;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-  Robot.encodedWristTalon.setPIDPosition(positionToMoveTo);
-  Robot.encodedWristTalon.move();
-  Robot.Log("TalonWristPidMove: initialized");
+    Robot.encodedArmTalon.resetEncoder();
+    Robot.Log("ArmEncoderResetCommand: reset started");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -35,8 +31,8 @@ public class TalonWristPIDMove extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    boolean done = Robot.encodedWristTalon.onTarget();
-    Robot.Log("TalonWristPidMove done:" + done);
+    boolean done = Robot.encodedArmTalon.encoderResetComplete();
+    Robot.Log("ArmEncoderResetCommand: reset finished:" + done);
     return done;
   }
 

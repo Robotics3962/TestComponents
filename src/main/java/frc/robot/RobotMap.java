@@ -20,21 +20,14 @@ public class RobotMap {
   public static final int EncoderPIOId1 = 5;
   public static final int EncoderPIOId2 = 6;  
 
-  /* Below added by Ian
-  * I added these to give the capability to test multiple encoders or switch out which encoders
-  * we are testing
-  */
-
-  //Encoder 2
-  public static final int EncoderPIOId3 = 7; 
-  public static final int EncoderPIOId4 = 8;
- 
-
-  /* End of Edit */
-
+  public static final int ElevatorEncoderPIOId1 = 5;
+  public static final int ElevatorEncoderPIOId2 = 6;  
+  
   public static final int LimitSwitchPIOId1 = 0;
   public static final int LimitSwitchPIOId2 = 1;
-  public static final int LimitSwitchPIOId3 = 2;
+  
+  public static final int ElevatorTopLimitSwitchId = 0;
+  public static final int ElevatorBottomLimitSwitchId = 1;
   
   // these are PWM ids
   public static final int SparkMotorId1 = 5;
@@ -48,20 +41,63 @@ public class RobotMap {
   public static final double TalonMinOutput = -0.5;
   public static final double TalonMaxOutput = 0.5;
 
+  //wrist
+  public static final double TalonUpSpeed = -.5;
+  public static final double TalonUpPidDelta = -20; // match sign of upspeed
+  public static final double TalonDownSpeed = .5;
+  public static final double TalonDownPidDelta = 20; // match sign of down speed
+  public static final double TalonStopSpeed = .001;
+  public static final double TalonAbsTolerance = 5;
+  public static final int    TalonCruiseSpeed = 15000;
+  public static final int    TalonAcceleration = 6000;
   public static final double TalonPID_P = 4; //0.2;
   public static final double TalonPID_I = 0.0;
   public static final double TalonPID_D = 0.0;
   public static final double TalonPID_F = 0.0;
-  public static final int    TalonCruiseSpeed = 15000;
-  public static final int    TalonAcceleration = 6000;
-  public static final double TalonAbsTolerance = 5;
-  public static final double TalonUpSpeed = -.3;
-  public static final double TalonDownSpeed = .3;
+
+
+  //arm
+  public static final double TalonArmUpSpeed = -.6;
+  public static final double TalonArmUpPidDelta = -20; // match sign of upspeed
+  public static final double TalonArmDownSpeed = .6;
+  public static final double TalonArmDownPidDelta = 20; // match sign of down speed
+  public static final double TalonSrmStopSpeed = .001;
+  public static final double TalonArmAbsTolerance = 5;
+  public static final int    TalonArmCruiseSpeed = 15000;
+  public static final int    TalonArmAcceleration = 6000;
+  public static final double TalonArmPID_P = 4; //0.2;
+  public static final double TalonArmPID_I = 0.0;
+  public static final double TalonArmPID_D = 0.0;
+  public static final double TalonArmPID_F = 0.0;
+
+  //wrist
+  public static final double TalonWristUpSpeed = -.5;
+  public static final double TalonWristUpPidDelta = -20; // match sign of upspeed
+  public static final double TalonWristDownSpeed = .5;
+  public static final double TalonWristDownPidDelta = 20; // match sign of down speed
+  public static final double TalonWristStopSpeed = .001;
+  public static final double TalonWristAbsTolerance = 5;
+  public static final int    TalonWristCruiseSpeed = 15000;
+  public static final int    TalonWristAcceleration = 6000;
+  public static final double TalonWristPID_P = 4; //0.2;
+  public static final double TalonWristPID_I = 0.0;
+  public static final double TalonWristPID_D = 0.0;
+  public static final double TalonWristPID_F = 0.0;
 
   // test elevator values
   public static final int SparkElevator = 5;
   public static final double ElevatorUpSpeed = -.4;
   public static final double ElevatorDownSpeed = .4;
+  public static final double ElevatorStopSpeed = .001;
+  public static final double ElevatorPID_P = 0.001;
+  public static final double ElevatorPID_I = 0.0;
+  public static final double ElevatorPID_D = 0.0;
+  public static final double ElevatorPID_F = 0.0;
+  public static final double ElevatorDistPerPulse = 1;
+  public static final boolean ElevatorReverseDirection = false;
+  public static final double ElevatorMinOutput = -.5;
+  public static final double ElevatorMaxOutput = .5;
+  public static final double ElevatorAbsTolerance = 5;
 
   // Joystick to use
   public static final int JoystickId = 0;

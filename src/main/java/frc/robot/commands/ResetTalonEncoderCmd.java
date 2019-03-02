@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.TalonEncoded;
+import frc.robot.subsystems.TalonEncodedArm;
 
 public class ResetTalonEncoderCmd extends Command {
   public ResetTalonEncoderCmd() {
@@ -20,7 +20,7 @@ public class ResetTalonEncoderCmd extends Command {
   @Override
   protected void initialize() {
     Robot.encodedTalon.resetEncoder();
-    Robot.Log("EncoderResetCommand: reset started");
+    Robot.Log("TalonEncoderResetCommand: reset started");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -31,8 +31,8 @@ public class ResetTalonEncoderCmd extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    boolean done = Robot.encodedTalon.encoderResetComplete();
-    Robot.Log("EncoderResetCommand: reset finishd:" + done);
+    boolean done = Robot.encodedWristTalon.encoderResetComplete();
+    Robot.Log("TalonEncoderResetCommand: reset finished:" + done);
     return done;
   }
 

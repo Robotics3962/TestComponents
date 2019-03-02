@@ -20,6 +20,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
+import java.lang.Math;
 
 /**
  * Add your docs here.
@@ -34,8 +35,9 @@ public class TalonEncodedWrist extends Subsystem {
   private static final int ENCODER_CONFIG_TIMEOUT = 10;
   private static final int TALONRSX_TIMEOUT = 10;
 
-  private TalonSRX motor3;
-  private TalonSRX motor4;
+  private TalonSRX motor1;
+  private TalonSRX motor2;
+
   private double targetPosition;
   private double velocity;
   private boolean isMoving; 
@@ -43,17 +45,12 @@ public class TalonEncodedWrist extends Subsystem {
   private boolean limitSwAreEnabled = false;
 
   //Limit switches;
-  private DigitalInput topLimit = new DigitalInput(RobotMap.LimitSwitchPIOId2);
-  private DigitalInput bottomLimit = new DigitalInput(RobotMap.LimitSwitchPIOId3);
+  private DigitalInput topLimit = null; //new DigitalInput(RobotMap.LimitSwitchPIOId2);
+  private DigitalInput bottomLimit = null; //new DigitalInput(RobotMap.LimitSwitchPIOId3);
 
-  // this is a divide by 0 which will 
-  // throw an exception which should 
-  // stop the program from running or otherwise
-  // indicate an erro
-  private void die(){
-    int x = 0;
-    int u = 1/x;
-  }
+  // holds variables used to determine out of phase encoders
+  private Robot.Direction dirMoved = Robot.Direction.NONE; 
+  private double pastPosition = 0.0;
 
   public TalonEncodedWrist() {
     encodersAreEnabled = true;
@@ -65,82 +62,82 @@ public class TalonEncodedWrist extends Subsystem {
 
     // assume that motor1 is connected to encoder
     
-    motor3 = new TalonSRX(RobotMap.TalonMotorCanID3);
-    motor4 = new TalonSRX(RobotMap.TalonMotorCanID4);
+    motor1 = new TalonSRX(RobotMap.TalonMotorCanID3);
+    motor2 = new TalonSRX(RobotMap.TalonMotorCanID4);
 
-    motor3.configFactoryDefault();
-    motor4.configFactoryDefault();
-
-     // only 1 controller (motor1) is wired to the encoder, so we have motor2
-    // follow motor1 to keep it moving at the same speed
-    motor4.follow(motor3);
-    
-		/* Set the peak and nominal outputs */
-		motor3.configNominalOutputForward(0, TALONRSX_TIMEOUT);
-		motor4.configNominalOutputReverse(0, TALONRSX_TIMEOUT);
-		motor3.configPeakOutputForward(RobotMap.TalonMaxOutput, TALONRSX_TIMEOUT);
-    motor3.configPeakOutputReverse(RobotMap.TalonMinOutput, TALONRSX_TIMEOUT);
+    motor1.configFactoryDefault();
+    motor2.configFactoryDefault();
 
     // this could be either true or false, we have to determine
     // how it is confgured
-    motor3.setInverted(false);
-    motor4.setInverted(false);
+    motor1.setInverted(false);
+    motor2.setInverted(false);
 
+     // only 1 controller (motor1) is wired to the encoder, so we have motor2
+    // follow motor1 to keep it moving at the same speed
+    motor2.follow(motor1);
+    
+		/* Set the peak and nominal outputs */
+		motor1.configNominalOutputForward(0, TALONRSX_TIMEOUT);
+		motor1.configNominalOutputReverse(0, TALONRSX_TIMEOUT);
+		motor1.configPeakOutputForward(RobotMap.TalonMaxOutput, TALONRSX_TIMEOUT);
+    motor1.configPeakOutputReverse(RobotMap.TalonMinOutput, TALONRSX_TIMEOUT);
+    
     if (encodersAreEnabled) {
       // init code pulled from https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/MotionMagic/src/main/java/frc/robot/Robot.java
 
       /* Configure Sensor Source for Pirmary PID */
-      motor3.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,	
+      motor1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative,	
           PRIMARY_ENCODER_IDX, 
           ENCODER_CONFIG_TIMEOUT);
 
-      motor3.setSensorPhase(true);
+      motor1.setSensorPhase(false);
 
       /* Set relevant frame periods to be at least as fast as periodic rate */
       /* DJD I don't know what this does                                    */
-		  motor3.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, ENCODER_CONFIG_TIMEOUT);
-		  motor3.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, ENCODER_CONFIG_TIMEOUT);
+		  motor1.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, ENCODER_CONFIG_TIMEOUT);
+		  motor1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, ENCODER_CONFIG_TIMEOUT);
 
       /* Set Motion Magic gains in slot0 - see documentation */
-      motor3.selectProfileSlot(ENCODER_SLOT_INDEX, PRIMARY_ENCODER_IDX);
+      motor1.selectProfileSlot(ENCODER_SLOT_INDEX, PRIMARY_ENCODER_IDX);
 
       //change these parameters
-      motor3.config_kF(0, RobotMap.TalonPID_F, ENCODER_CONFIG_TIMEOUT);
-      motor3.config_kP(0, RobotMap.TalonPID_P, ENCODER_CONFIG_TIMEOUT);
-      motor3.config_kI(0, RobotMap.TalonPID_I, ENCODER_CONFIG_TIMEOUT);
-      motor3.config_kD(0, RobotMap.TalonPID_D, ENCODER_CONFIG_TIMEOUT);
+      motor1.config_kF(0, RobotMap.TalonWristPID_F, ENCODER_CONFIG_TIMEOUT);
+      motor1.config_kP(0, RobotMap.TalonWristPID_P, ENCODER_CONFIG_TIMEOUT);
+      motor1.config_kI(0, RobotMap.TalonWristPID_I, ENCODER_CONFIG_TIMEOUT);
+      motor1.config_kD(0, RobotMap.TalonWristPID_D, ENCODER_CONFIG_TIMEOUT);
   
   		/* Set acceleration and vcruise velocity - see documentation */
-		  motor3.configMotionCruiseVelocity(RobotMap.TalonCruiseSpeed, ENCODER_CONFIG_TIMEOUT);
-		  motor3.configMotionAcceleration(RobotMap.TalonAcceleration, ENCODER_CONFIG_TIMEOUT);
+		  motor1.configMotionCruiseVelocity(RobotMap.TalonWristCruiseSpeed, ENCODER_CONFIG_TIMEOUT);
+		  motor1.configMotionAcceleration(RobotMap.TalonWristAcceleration, ENCODER_CONFIG_TIMEOUT);
 
 		  /* Zero the sensor */
-      motor3.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_CONFIG_TIMEOUT);
+      motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_CONFIG_TIMEOUT);
     }
 
-    motor3.setNeutralMode(NeutralMode.Brake);
-    motor4.setNeutralMode(NeutralMode.Brake);
+    motor1.setNeutralMode(NeutralMode.Brake);
+    motor2.setNeutralMode(NeutralMode.Brake);
 
-    Robot.Log("Talon is initialized");
+    Robot.Log("wrist is initialized");
   }
 
   public void setPIDPosition(double pos) {
     if(!encodersAreEnabled){
-      die();
+      Robot.die();
     }
-    Robot.Log("setPidPosition:" + pos);
+    Robot.Log("wrist setPidPosition:" + pos);
     targetPosition = pos;
     move();
   }
 
   public void setTalonSpeed(double val){
     velocity = val;
-    Robot.Log("SetTalonSpeed:" + velocity);
-    motor3.set(ControlMode.PercentOutput, velocity);  
+    Robot.Log("wrist SetTalonSpeed:" + velocity);
+    motor1.set(ControlMode.PercentOutput, velocity);  
   }
 
   public void stop() {
-    motor3.neutralOutput();
+    motor1.neutralOutput();
 
     // this isn't completely true as this call will start stopping
     // the motor, it may not be completely stopped for an undetermined
@@ -150,7 +147,7 @@ public class TalonEncodedWrist extends Subsystem {
 
   public boolean resetEncoder(){
     if(!encodersAreEnabled){
-      die();
+      Robot.die();
     }
 
     stop();
@@ -159,20 +156,20 @@ public class TalonEncodedWrist extends Subsystem {
     // be indeterminate, we don't want to call this while
     // a move command is running
     if (isMoving) {
-      die();
+      Robot.die();
       return false;
     }
     // there is no guarantee the position will be 0 when this call returns.
     // because it is done asynchronously. Have a command call encoderResetComplete()
     // until it returns true 
-    motor3.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_RESET_TIMEOUT);
-    Robot.Log("talon encoders reset");
+    motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_RESET_TIMEOUT);
+    Robot.Log("wrist talon encoders reset");
     return true;
   }
 
   public boolean encoderResetComplete(){
     if(!encodersAreEnabled){
-      die();
+      Robot.die();
     }
 
     // make sure no move command is running
@@ -186,24 +183,24 @@ public class TalonEncodedWrist extends Subsystem {
     // a range
     if (getCurrentPosition() == 0){
       complete = true;
-      Robot.Log("Talon encoder is at 0");
+      Robot.Log("wrist Talon encoder is at 0");
     }
     return complete;
   }
 
   public double getCurrentPosition() {
     if(!encodersAreEnabled){
-      die();
+      Robot.die();
     }
 
-    double currpos = motor3.getSelectedSensorPosition(0);
-    Robot.Log("Talon: currposition(" + currpos + ")");
+    double currpos = motor1.getSelectedSensorPosition(0);
+    Robot.Log("wrist Talon: currposition(" + currpos + ")");
     return currpos;
   }
 
   public void holdPosition(){
     if(!encodersAreEnabled){
-      die();
+      Robot.die();
     }
     
     move();
@@ -211,16 +208,16 @@ public class TalonEncodedWrist extends Subsystem {
 
   public void move(){
     if(!encodersAreEnabled){
-      die();
+      Robot.die();
     }
-    Robot.Log("moving to target position:" + targetPosition);
+    Robot.Log("wrist moving to target position:" + targetPosition);
     //isMoving = true;
-    motor3.set(ControlMode.MotionMagic, targetPosition);
+    motor1.set(ControlMode.MotionMagic, targetPosition);
   }
 
   public boolean onTarget(){
     if(!encodersAreEnabled){
-      die();
+      Robot.die();
     }
     
     boolean reachedTarget = false;
@@ -228,16 +225,16 @@ public class TalonEncodedWrist extends Subsystem {
     boolean aboveRange = true;
     double curpos = getCurrentPosition();
 
-    belowRange = curpos < (targetPosition - RobotMap.TalonAbsTolerance);
-    aboveRange = curpos > (targetPosition + RobotMap.TalonAbsTolerance);
+    belowRange = curpos < (targetPosition - RobotMap.TalonWristAbsTolerance);
+    aboveRange = curpos > (targetPosition + RobotMap.TalonWristAbsTolerance);
 
     reachedTarget = ((!belowRange) && (!aboveRange));
-    Robot.Log("OnTarget:" + reachedTarget + " (" + belowRange + "," + aboveRange + ")");
+    Robot.Log("wrist OnTarget:" + reachedTarget + " (" + belowRange + "," + aboveRange + ")");
     return reachedTarget;
   }
 
   public void logEncoderValues(){
-    Robot.Log("Talon current pos:" + getCurrentPosition());
+    Robot.Log("wrist Talon current pos:" + getCurrentPosition());
   }
 
   public void Up(){
@@ -246,7 +243,10 @@ public class TalonEncodedWrist extends Subsystem {
       stop();
     }
     else {
-      setTalonSpeed(RobotMap.TalonUpSpeed);
+      VerifyEncoderPhase(pastPosition);
+      dirMoved = Robot.Direction.UP;
+      pastPosition = getCurrentPosition();
+      setTalonSpeed(RobotMap.TalonWristUpSpeed);
       logEncoderValues();
     }
   }
@@ -256,12 +256,17 @@ public class TalonEncodedWrist extends Subsystem {
       stop();
     }
     else {
-      setTalonSpeed(RobotMap.TalonDownSpeed);
+      VerifyEncoderPhase(pastPosition);
+      dirMoved = Robot.Direction.DOWN;
+      pastPosition = getCurrentPosition();
+      setTalonSpeed(RobotMap.TalonWristDownSpeed);
       logEncoderValues();
     }
   }
 
   public void Stop(){
+    // or call motor1.stopMotor();
+    setTalonSpeed(RobotMap.TalonWristStopSpeed);
     stop();
     logEncoderValues();
   }
@@ -278,7 +283,7 @@ public class TalonEncodedWrist extends Subsystem {
   }
 
   public void dumpLimitSwitchValues(){
-    Robot.Log("talon: atLowerLimit:" + atLowerLimit() + " atUpperLimit:" + atUpperLimit());
+    Robot.Log("wrist talon: atLowerLimit:" + atLowerLimit() + " atUpperLimit:" + atUpperLimit());
   }  
 
   @Override
@@ -287,5 +292,36 @@ public class TalonEncodedWrist extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
- 
+  // make sure the motor and encoder are in phase.  This means that
+  // when we move the motor with a negative speed, the encoder
+  // show we moved in the negative direction and vice versa
+  private boolean VerifyEncoderPhase(double prevPos){
+    double pos = getCurrentPosition();
+    double deltaPos = pos - prevPos;
+    double sign = 0;
+    boolean check = true;
+    boolean inPhase = true;
+
+    switch(dirMoved){
+      case DOWN:
+        sign = Math.copySign(1, RobotMap.TalonWristDownSpeed);
+        break;
+      case UP:
+        sign = Math.copySign(1, RobotMap.TalonWristUpSpeed);
+        break;
+      case NONE:
+        check = false;
+      break;
+    }
+    
+    if( check && (deltaPos != 0) ){
+      double deltaPosSign = Math.copySign(1, deltaPos);
+      if( deltaPosSign != sign){
+        inPhase = false;
+        Robot.Log("Wrist encoder is out of Phase from Wrist Motor");
+        Robot.die();
+      }
+    }
+    return inPhase;
+  }
 }

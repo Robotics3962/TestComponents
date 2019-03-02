@@ -9,22 +9,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.TalonEncodedArm;
+import frc.robot.RobotMap;
 
-public class TalonWristPIDMove extends Command {
-  private double positionToMoveTo;
-
-  public TalonWristPIDMove(double pos) {
-    requires(Robot.encodedWristTalon);
-    positionToMoveTo = pos;
+public class PIDArmDownCmd extends Command {
+  public PIDArmDownCmd() {
+    requires(Robot.encodedArmTalon);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-  Robot.encodedWristTalon.setPIDPosition(positionToMoveTo);
-  Robot.encodedWristTalon.move();
-  Robot.Log("TalonWristPidMove: initialized");
+    // make sure this is the right direction
+    Robot.targetArmPosition += RobotMap.TalonArmDownPidDelta;
+    Robot.encodedArmTalon.setPIDPosition(Robot.targetArmPosition);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -35,9 +32,7 @@ public class TalonWristPIDMove extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    boolean done = Robot.encodedWristTalon.onTarget();
-    Robot.Log("TalonWristPidMove done:" + done);
-    return done;
+    return false;
   }
 
   // Called once after isFinished returns true

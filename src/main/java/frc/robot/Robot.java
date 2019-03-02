@@ -17,6 +17,7 @@ import frc.robot.subsystems.ElevatorTest;
 import frc.robot.subsystems.EncoderTest;
 import frc.robot.subsystems.TalonEncodedArm;
 import frc.robot.subsystems.TalonEncodedWrist;
+import frc.robot.subsystems.TalonEncoded;
 
 
 /**
@@ -39,10 +40,33 @@ public class Robot extends TimedRobot {
   public static TalonEncodedArm encodedArmTalon = null;
   public static TalonEncodedWrist encodedWristTalon = null;
   public static ElevatorTest elevatorTest = null;
-
+  public static TalonEncoded encodedTalon = null;
+  
+  public static double targetWristPosition = 0;
+  public static double targetArmPosition = 0;
+  public static double targetElevatorPosition = 0;
+  
   public static void Log(String msg){
     System.out.println(msg);
   }
+  
+  // used to detect out of phase encoder
+  public enum Direction {
+    NONE,UP,DOWN
+  }
+  Direction dirMoved;
+  double pastPosition;
+
+
+  // this is a divide by 0 which will 
+  // throw an exception which should 
+  // stop the program from running or otherwise
+  // indicate an error
+  public static void die(){
+    int x = 0;
+    int u = 1/x;
+  }
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -51,10 +75,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
 
     // create subsystems
-    limitSwitchTest = new LimitSwitchTest();
-    encoderTest = new EncoderTest();
-    encodedArmTalon = new TalonEncodedArm();
-    elevatorTest = new ElevatorTest();
+    //limitSwitchTest = new LimitSwitchTest();
+    //encoderTest = new EncoderTest();
+    //encodedArmTalon = new TalonEncodedArm();
+    encodedWristTalon =  new TalonEncodedWrist();
+    //elevatorTest = new ElevatorTest();
 
     // call control loop
     m_oi = new OI();

@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import java.lang.Math;
 
-public class TalonEncodedArm extends Subsystem {
+public class TalonEncoded extends Subsystem {
 
   private static final int ENCODER_SLOT_INDEX = 0;
   private static final int PRIMARY_ENCODER_IDX = 0;
@@ -46,7 +46,7 @@ public class TalonEncodedArm extends Subsystem {
   private DigitalInput topLimit = null; //new DigitalInput(RobotMap.LimitSwitchPIOId2);
   private DigitalInput bottomLimit = null; //new DigitalInput(RobotMap.LimitSwitchPIOId3);
 
-  public TalonEncodedArm() {
+  public TalonEncoded() {
     encodersAreEnabled = true;
     limitSwAreEnabled = false;
 
@@ -94,14 +94,14 @@ public class TalonEncodedArm extends Subsystem {
       /* Set Motion Magic gains in slot0 - see documentation */
       motor1.selectProfileSlot(ENCODER_SLOT_INDEX, PRIMARY_ENCODER_IDX);
 
-      motor1.config_kF(0, RobotMap.TalonArmPID_F, ENCODER_CONFIG_TIMEOUT);
-      motor1.config_kP(0, RobotMap.TalonArmPID_P, ENCODER_CONFIG_TIMEOUT);
-      motor1.config_kI(0, RobotMap.TalonArmPID_I, ENCODER_CONFIG_TIMEOUT);
-      motor1.config_kD(0, RobotMap.TalonArmPID_D, ENCODER_CONFIG_TIMEOUT);
+      motor1.config_kF(0, RobotMap.TalonPID_F, ENCODER_CONFIG_TIMEOUT);
+      motor1.config_kP(0, RobotMap.TalonPID_P, ENCODER_CONFIG_TIMEOUT);
+      motor1.config_kI(0, RobotMap.TalonPID_I, ENCODER_CONFIG_TIMEOUT);
+      motor1.config_kD(0, RobotMap.TalonPID_D, ENCODER_CONFIG_TIMEOUT);
   
   		/* Set acceleration and vcruise velocity - see documentation */
-		  motor1.configMotionCruiseVelocity(RobotMap.TalonArmCruiseSpeed, ENCODER_CONFIG_TIMEOUT);
-		  motor1.configMotionAcceleration(RobotMap.TalonArmAcceleration, ENCODER_CONFIG_TIMEOUT);
+		  motor1.configMotionCruiseVelocity(RobotMap.TalonCruiseSpeed, ENCODER_CONFIG_TIMEOUT);
+		  motor1.configMotionAcceleration(RobotMap.TalonAcceleration, ENCODER_CONFIG_TIMEOUT);
 
 		  /* Zero the sensor */
       motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_CONFIG_TIMEOUT);
@@ -217,8 +217,8 @@ public class TalonEncodedArm extends Subsystem {
     boolean aboveRange = true;
     double curpos = getCurrentPosition();
 
-    belowRange = curpos < (targetPosition - RobotMap.TalonArmAbsTolerance);
-    aboveRange = curpos > (targetPosition + RobotMap.TalonArmAbsTolerance);
+    belowRange = curpos < (targetPosition - RobotMap.TalonAbsTolerance);
+    aboveRange = curpos > (targetPosition + RobotMap.TalonAbsTolerance);
 
     reachedTarget = ((!belowRange) && (!aboveRange));
     Robot.Log("OnTarget:" + reachedTarget + " (" + belowRange + "," + aboveRange + ")");
@@ -241,7 +241,7 @@ public class TalonEncodedArm extends Subsystem {
       VerifyEncoderPhase(pastPosition);
       dirMoved = Robot.Direction.UP;
       pastPosition = getCurrentPosition();
-      setTalonSpeed(RobotMap.TalonArmUpSpeed);
+      setTalonSpeed(RobotMap.TalonUpSpeed);
       logEncoderValues();
     }
   }
@@ -254,7 +254,7 @@ public class TalonEncodedArm extends Subsystem {
       VerifyEncoderPhase(pastPosition);
       dirMoved = Robot.Direction.DOWN;
       pastPosition = getCurrentPosition();
-      setTalonSpeed(RobotMap.TalonArmDownSpeed);
+      setTalonSpeed(RobotMap.TalonDownSpeed);
       logEncoderValues();
     }
   }
@@ -306,7 +306,7 @@ public class TalonEncodedArm extends Subsystem {
       double deltaPosSign = Math.copySign(1, deltaPos);
       if( deltaPosSign != sign){
         inPhase = false;
-        Robot.Log("Arm encoder is out of Phase from Arm Motor");
+        Robot.Log("Talon encoder is out of Phase from Talon Motor");
         Robot.die();
       }
     }
