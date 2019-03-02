@@ -11,22 +11,20 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
-public class PIDArmUpCmd extends Command {
-  public PIDArmUpCmd() {
+public class ArmHoldCmd extends Command {
+  public ArmHoldCmd() {
     requires(Robot.encodedArmTalon);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-     // make sure this is the right direction
-    double newPos = Robot.encodedArmTalon.getTargetPosition() + RobotMap.TalonArmUpPidDelta;
-    Robot.encodedArmTalon.setPIDPosition(newPos);
- }
+  }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.encodedArmTalon.holdPosition();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -44,6 +42,5 @@ public class PIDArmUpCmd extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-      end();
   }
 }

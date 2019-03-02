@@ -23,7 +23,7 @@ public class TalonArmPIDMove extends Command {
   @Override
   protected void initialize() {
     Robot.encodedArmTalon.setPIDPosition(positionToMoveTo);
-    Robot.Log("TalonPidMove: initialized");
+    Robot.Log("Arm TalonPidMove: initialized");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -35,7 +35,7 @@ public class TalonArmPIDMove extends Command {
   @Override
   protected boolean isFinished() {
     boolean done = Robot.encodedArmTalon.onTarget();
-    Robot.Log("TalonPidMove done:" + done);
+    Robot.Log("Arm TalonPidMove done:" + done);
     return done;
   }
 

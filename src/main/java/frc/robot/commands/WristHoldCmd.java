@@ -7,26 +7,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.command.Command;
 
-public class PIDArmUpCmd extends Command {
-  public PIDArmUpCmd() {
-    requires(Robot.encodedArmTalon);
+public class WristHoldCmd extends Command {
+  public WristHoldCmd() {
+    requires(Robot.encodedWristTalon);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-     // make sure this is the right direction
-    double newPos = Robot.encodedArmTalon.getTargetPosition() + RobotMap.TalonArmUpPidDelta;
-    Robot.encodedArmTalon.setPIDPosition(newPos);
- }
+  }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.encodedWristTalon.holdPosition();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -44,6 +41,5 @@ public class PIDArmUpCmd extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-      end();
   }
 }

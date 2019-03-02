@@ -18,6 +18,7 @@ import frc.robot.subsystems.EncoderTest;
 import frc.robot.subsystems.TalonEncodedArm;
 import frc.robot.subsystems.TalonEncodedWrist;
 import frc.robot.subsystems.TalonEncoded;
+import frc.robot.subsystems.PIDElevator;
 
 
 /**
@@ -41,7 +42,7 @@ public class Robot extends TimedRobot {
   public static TalonEncodedWrist encodedWristTalon = null;
   public static ElevatorTest elevatorTest = null;
   public static TalonEncoded encodedTalon = null;
-  
+  public static PIDElevator pidElevator = null;
   public static double targetWristPosition = 0;
   public static double targetArmPosition = 0;
   public static double targetElevatorPosition = 0;

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
+import frc.robot.commands.ElevatorHoldCmd;
 
 /**
  * Add your docs here.
@@ -72,8 +73,7 @@ public class PIDElevator extends PIDSubsystem {
 
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new ElevatorHoldCmd());
   }
 
   public double getSetPosition(){
@@ -101,6 +101,10 @@ public class PIDElevator extends PIDSubsystem {
     // start the timing loop after we set the distance
     // this is needed for PID loop to start working
     getPIDController().enable();  
+  }
+
+  public void holdPosition(){
+    setPIDPosition(setPosition);    
   }
 
   public void resetEncoder(){

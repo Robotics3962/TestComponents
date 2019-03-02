@@ -20,9 +20,9 @@ public class PIDWristUpCmd extends Command {
   @Override
   protected void initialize() {
      // make sure this is the right direction
-     Robot.targetWristPosition += RobotMap.TalonWristUpPidDelta;
-     Robot.encodedWristTalon.setPIDPosition(Robot.targetWristPosition);
-  }
+     double newPos = Robot.encodedWristTalon.getTargetPosition() + RobotMap.TalonWristUpPidDelta;
+     Robot.encodedWristTalon.setPIDPosition(newPos);
+   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override

@@ -20,8 +20,8 @@ public class PIDArmDownCmd extends Command {
   @Override
   protected void initialize() {
     // make sure this is the right direction
-    Robot.targetArmPosition += RobotMap.TalonArmDownPidDelta;
-    Robot.encodedArmTalon.setPIDPosition(Robot.targetArmPosition);
+    double newPos = Robot.encodedArmTalon.getTargetPosition() + RobotMap.TalonArmDownPidDelta;
+    Robot.encodedArmTalon.setPIDPosition(newPos);
   }
 
   // Called repeatedly when this Command is scheduled to run

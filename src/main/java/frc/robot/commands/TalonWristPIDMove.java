@@ -24,7 +24,7 @@ public class TalonWristPIDMove extends Command {
   protected void initialize() {
   Robot.encodedWristTalon.setPIDPosition(positionToMoveTo);
   Robot.encodedWristTalon.move();
-  Robot.Log("TalonWristPidMove: initialized");
+  Robot.Log("Wrist TalonPidMove: initialized");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -36,7 +36,7 @@ public class TalonWristPIDMove extends Command {
   @Override
   protected boolean isFinished() {
     boolean done = Robot.encodedWristTalon.onTarget();
-    Robot.Log("TalonWristPidMove done:" + done);
+    Robot.Log("Wrist TalonPidMove done:" + done);
     return done;
   }
 
