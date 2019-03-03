@@ -217,6 +217,14 @@ public class TalonEncodedArm extends Subsystem {
       Robot.die();
     }
 
+    // if we have reached the limits, then make sure
+    // we don't move past them, so set the position we
+    // want to move to to the current position
+    // so we stop moving
+    if(atLowerLimit() || atUpperLimit()){
+      targetPosition = getCurrentPosition();
+    }
+
     // only move via PID when we are not manually controlling
     if(!manualOverride){
       if(useMotionMagic){
