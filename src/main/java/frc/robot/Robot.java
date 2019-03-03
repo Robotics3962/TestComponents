@@ -82,7 +82,6 @@ public class Robot extends TimedRobot {
         break;
       case Elevator:
         elevatorTest = new ElevatorTest();
-        encoderTest = new EncoderTest();
         break;
       case Wrist:
         encodedWristTalon = new TalonEncodedWrist();

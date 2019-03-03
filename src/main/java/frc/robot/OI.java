@@ -20,6 +20,7 @@ import frc.robot.commands.TalonArmMoveDownCmd;
 import frc.robot.commands.TalonArmMoveUpCmd;
 import frc.robot.commands.ResetArmEncoderCmd;
 import frc.robot.commands.ResetWristEncoderCmd;
+import frc.robot.commands.ResetElevatorEncoderCmd;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -50,7 +51,7 @@ public class OI {
         break;
       case Elevator:
         // reset the encoder (set it to 0)
-        buttonA.whenPressed(new EncoderTestCmd());
+        buttonA.whenPressed(new ResetElevatorEncoderCmd());
         // manually move the elevator and log the position of the encoder
         buttonRS.whileHeld(new ElevatorUpCmd());
         buttonLS.whileHeld(new ElevatorDownCmd());
@@ -72,6 +73,7 @@ public class OI {
         buttonLS.whileHeld(new TalonArmMoveDownCmd());
       break;
       case Encoder:
+        buttonA.whileHeld(new EncoderTestCmd());
         break;
     }
   }
