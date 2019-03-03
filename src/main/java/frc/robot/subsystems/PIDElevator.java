@@ -22,14 +22,15 @@ public class PIDElevator extends PIDSubsystem {
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  Spark motor1;
-  DigitalInput topLimit = null;
-  DigitalInput bottomLimit = null;
-  Encoder elevatorEncoder = null;
-  double setPosition = 0;
-  double currSpeed = 0;
-  boolean useLimitSwitches = false;
-  boolean useEncoders = false;
+  private Spark motor1;
+  private DigitalInput topLimit = null;
+  private DigitalInput bottomLimit = null;
+  private Encoder elevatorEncoder = null;
+  private double targetPosition = 0;
+  private double currSpeed = 0;
+  private boolean useLimitSwitches = true;
+  private boolean useEncoders = true;
+  private boolean manualOverride = false;
 
   // holds variables used to determine out of phase encoders
   private Robot.Direction dirMoved = Robot.Direction.NONE; 
@@ -77,26 +78,25 @@ public class PIDElevator extends PIDSubsystem {
   }
 
   public double getSetPosition(){
-    return setPosition;
+    return targetPosition;
   }
 
   public double getCurrentPosition(){
-    if(useEncoders){
-      return elevatorEncoder.getDistance();
+    if(! useEncoders){
+      Robot.die();
     }
-    else {
-      return 0;
-    }
+
+    return elevatorEncoder.getDistance();
   }
 
   public void setPIDPosition(double distance){
     if(! useEncoders){
-      return;
+      Robot.die();
     }
 
-    Robot.Log("PIDElevator: setPosition:" + distance);
     setSetpoint(distance);
-    setPosition = distance;
+    targetPosition = distance;
+    manualOverride = false;
 
     // start the timing loop after we set the distance
     // this is needed for PID loop to start working
@@ -104,44 +104,66 @@ public class PIDElevator extends PIDSubsystem {
   }
 
   public void holdPosition(){
-    setPIDPosition(setPosition);    
+    if(! useEncoders){
+      Robot.die();
+    }
+
+    setPIDPosition(targetPosition);    
   }
 
   public void resetEncoder(){
-    if(useEncoders){
-      elevatorEncoder.reset();
+    if(! useEncoders){
+      Robot.die();
     }
+
+    elevatorEncoder.reset();
   }
 
   @Override
-  public double returnPIDInput() { //originally protected
-    double var = getCurrentPosition();
-    //Robot.Log("PIDElevator: PIDInput: "+ var); 
-    return var;  
+  protected double returnPIDInput() { 
+    if(! useEncoders){
+      Robot.die();
+    }
+
+    double pos = getCurrentPosition();
+
+    // stop moving if we are at a limit switch
+    // we do this by setting the position we want to
+    // move to to the position we are at
+    if(atUpperLimit() || atLowerLimit()){
+      Robot.Log("PIDElevator: At currpos:" + pos + " lowerlimit:" + atLowerLimit() + " upperlimit:" +atUpperLimit());
+      setPIDPosition(pos);
+    }
+
+    return pos;  
   }
 
   @Override
-  public void usePIDOutput(double output) {//originally protected
-    //Robot.Log("PIDElevator: PIDOutput:" + output);
+  protected void usePIDOutput(double output) {
+    if(! useEncoders){
+      Robot.die();
+    }
+
     motor1.pidWrite(output);
   }
 
   // used to manually set the speed which will disable pid control
   public void setSpeed(double speed){
     currSpeed = speed;
+    manualOverride = true;
+
+    // make sure we turn off the pid loop
     getPIDController().disable();
     motor1.set(currSpeed);
   }
 
   public void Up() {
-    dumpLimitSwitchValues();
     if (atUpperLimit()){
       Stop();
     } 
     else {
       VerifyEncoderPhase(pastPosition);
       dirMoved = Robot.Direction.UP;
-      pastPosition = getCurrentPosition();
       setSpeed(RobotMap.ElevatorUpSpeed);
     }
   }
@@ -157,10 +179,8 @@ public class PIDElevator extends PIDSubsystem {
       Stop();
     } 
     else {
-     // Robot.Log("moving elevator down");
      VerifyEncoderPhase(pastPosition);
      dirMoved = Robot.Direction.DOWN;
-     pastPosition = getCurrentPosition();
      setSpeed(RobotMap.ElevatorDownSpeed);
     }
   }
@@ -192,37 +212,44 @@ public class PIDElevator extends PIDSubsystem {
     Robot.Log("Elevator: atLowerLimit:" + atLowerLimit() + " atUpperLimit:" + atUpperLimit());
   }  
 
-    // make sure the motor and encoder are in phase.  This means that
+ // make sure the motor and encoder are in phase.  This means that
   // when we move the motor with a negative speed, the encoder
   // show we moved in the negative direction and vice versa
-  private boolean VerifyEncoderPhase(double prevPos){
+  private void VerifyEncoderPhase(double prevPos){
     double pos = getCurrentPosition();
     double deltaPos = pos - prevPos;
     double sign = 0;
     boolean check = true;
-    boolean inPhase = true;
 
-    switch(dirMoved){
+    // don't do this check when running PID
+    // as prev and curr position are not set
+    // correctly and could flag a false positive
+    // or a false negative
+    if(!manualOverride){
+      return;
+    }
+
+    switch(dirMoved){//direction moved
       case DOWN:
-        sign = Math.copySign(1, RobotMap.TalonWristDownSpeed);
+        sign = Math.copySign(1, RobotMap.ElevatorDownSpeed);
         break;
       case UP:
-        sign = Math.copySign(1, RobotMap.TalonWristUpSpeed);
+        sign = Math.copySign(1, RobotMap.ElevatorUpSpeed);
         break;
       case NONE:
         check = false;
       break;
     }
 
-    if( check  && (deltaPos != 0)){
+    if( check && (Math.abs(deltaPos) > RobotMap.EncoderSlop) ){
       double deltaPosSign = Math.copySign(1, deltaPos);
       if( deltaPosSign != sign){
-        inPhase = false;
-        Robot.Log("Arm encoder is out of Phase from Arm Motor");
+        Robot.Log("Elevator encoder is out of Phase from Arm Motor dir:" + dirMoved + " deltapos:" + deltaPos);
         Robot.die();
       }
     }
-    return inPhase;
+    pastPosition = getCurrentPosition();
+    return;
   }
 
 }
