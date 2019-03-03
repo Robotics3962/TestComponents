@@ -6,7 +6,9 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands;
+
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -14,7 +16,7 @@ public class ElevatorUpCmd extends Command {
   public ElevatorUpCmd() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires (Robot.elevatorTest);
+    requires (Robot.pidElevator);
   }
 
   // Called just before this Command runs the first time
@@ -25,8 +27,8 @@ public class ElevatorUpCmd extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    Robot.elevatorTest.Up();
+    double newPos = Robot.pidElevator.getTargetPosition() + RobotMap.ElevatorUpPidDelta;
+    Robot.pidElevator.setPIDPosition(newPos);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -38,7 +40,6 @@ public class ElevatorUpCmd extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.elevatorTest.Stop();
   }
 
   // Called when another command which requires one or more of the same

@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class ResetElevatorEncoderCmd extends Command {
   public ResetElevatorEncoderCmd() {
-    requires(Robot.elevatorTest);
+    requires(Robot.pidElevator);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.elevatorTest.resetEncoder();
+    Robot.pidElevator.resetEncoder();
   }
 
   // Called repeatedly when this Command is scheduled to run

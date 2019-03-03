@@ -12,14 +12,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.LimitSwitchTest;
-import frc.robot.subsystems.ElevatorTest;
-import frc.robot.subsystems.EncoderTest;
 import frc.robot.subsystems.TalonEncodedArm;
 import frc.robot.subsystems.TalonEncodedWrist;
-import frc.robot.subsystems.TalonEncoded;
 import frc.robot.subsystems.PIDElevator;
-
+import frc.robot.subsystems.DiffDriveBase;
+import frc.robot.subsystems.Intake;
+import frc.robot.utils.CollectorPosition;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,22 +34,32 @@ public class Robot extends TimedRobot {
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   // subsystems
-  public static LimitSwitchTest limitSwitchTest = null;
-  public static EncoderTest encoderTest = null;
   public static TalonEncodedArm encodedArmTalon = null;
   public static TalonEncodedWrist encodedWristTalon = null;
-  public static ElevatorTest elevatorTest = null;
-  public static TalonEncoded encodedTalon = null;
   public static PIDElevator pidElevator = null;
-  public static double targetWristPosition = 0;
-  public static double targetArmPosition = 0;
-  public static double targetElevatorPosition = 0;
-  
+  public static DiffDriveBase diffDriveBase = null;
+  public static Intake intake = null;
+
+  // this array holds the position of the collector in each index
+  public static CollectorPosition[] collectorPositions;
+
+  // copy the constants into the array to make access cleaner
+  public static void initPositionArray(){
+    collectorPositions = new CollectorPosition[RobotMap.MaxBallPosIndex];
+    collectorPositions[RobotMap.GrabBallPosIndex] = new CollectorPosition(RobotMap.GrabBallElevatorPos, RobotMap.GrabBallArmPos, RobotMap.GrabBallWristPos);
+    collectorPositions[RobotMap.StowPosIndex] = new CollectorPosition(RobotMap.StowBallElevatorPos, RobotMap.StowBallArmPos, RobotMap.StowBallWristPos);
+    collectorPositions[RobotMap.LowBallPosIndex] = new CollectorPosition(RobotMap.LowBallElevatorPos, RobotMap.LowBallArmPos, RobotMap.LowBallWristPos);
+    collectorPositions[RobotMap.MiddleBallPosIndex] = new CollectorPosition(RobotMap.MiddleBallElevatorPos, RobotMap.MiddleBallArmPos, RobotMap.MiddleBallWristPos);
+    collectorPositions[RobotMap.HighBallPosIndex] = new CollectorPosition(RobotMap.HighBallElevatorPos, RobotMap.HighBallArmPos, RobotMap.HighBallWristPos);
+    collectorPositions[RobotMap.CarryBallPosIndex] = new CollectorPosition(RobotMap.CarryBallElevatorPos, RobotMap.CarryBallArmPos, RobotMap.CarryBallWristPos);
+  }
+
+  // this is used to log output to the console
   public static void Log(String msg){
     System.out.println(msg);
   }
   
-  // used to detect out of phase encoder
+  // used in out of phase encoder detection
   public enum Direction {
     NONE,UP,DOWN
   }
@@ -72,28 +80,17 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
 
-    // create subsystems for certain tests
-    switch(RobotMap.testModule){
-      case Custom:
-        // don't create any subsystems
-        break;
-      case LimitSwitch:
-        limitSwitchTest = new LimitSwitchTest();
-        break;
-      case Elevator:
-        elevatorTest = new ElevatorTest();
-        break;
-      case Wrist:
-        encodedWristTalon = new TalonEncodedWrist();
-        break;
-      case Arm:
-        encodedArmTalon = new TalonEncodedArm();
-        break;
-      case Encoder:
-        encoderTest = new EncoderTest();
-        break;
-    }
+    // make the positions to move the collector into
+    // easy access
+    initPositionArray();
 
+    // create all subsystems
+    diffDriveBase = new DiffDriveBase();
+    encodedWristTalon = new TalonEncodedWrist();
+    encodedArmTalon = new TalonEncodedArm();
+    pidElevator = new PIDElevator();
+    intake = new Intake();
+    
     // call control loop
     m_oi = new OI();
 

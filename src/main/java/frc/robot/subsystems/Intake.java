@@ -6,29 +6,35 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.Robot;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * Add your docs here.
  */
-public class LimitSwitchTest extends Subsystem {
+public class Intake extends Subsystem {
 
-private DigitalInput limitSwitch = null; 
+    Spark motor;
 
-public LimitSwitchTest(){
-  limitSwitch = new DigitalInput(RobotMap.LimitSwitchPIOId1);
-}
+    public Intake(){
+		motor = new Spark(RobotMap.SparkIntakeId);
+		motor.enableDeadbandElimination(true);	
+	}
+		
+	public void grabIntake() {
+		motor.set(RobotMap.IntakeIngressSpeed);
+	}
+	
+	public void shootIntake() {
+		motor.set(RobotMap.IntakeEgressSpeed);
+	}
+	
+	public void stopIntake() {		
+		motor.stopMotor();
+    }
 
-public void LogValues()
-{
-  Robot.Log("Limitswitch value is (" + limitSwitch.get() + ")");
-}
-
-@Override
-  public void initDefaultCommand() {
-  }
+    @Override
+    protected void initDefaultCommand() {
+    }
 }

@@ -9,13 +9,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 
-public class LimitSwitchTestCmd extends Command {
-  private int count = 0;
-
-  public LimitSwitchTestCmd() {
-    requires(Robot.limitSwitchTest);
+public class ShootBallCmd extends Command {
+  public ShootBallCmd() {
+    requires(Robot.intake);
   }
 
   // Called just before this Command runs the first time
@@ -26,10 +23,7 @@ public class LimitSwitchTestCmd extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if( (count % 50) == 0) {
-      Robot.limitSwitchTest.LogValues();
-    }
-    count++;
+    Robot.intake.shootIntake();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -41,6 +35,7 @@ public class LimitSwitchTestCmd extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.intake.stopIntake();
   }
 
   // Called when another command which requires one or more of the same

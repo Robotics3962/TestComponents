@@ -10,9 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class TalonArmMoveUpCmd extends Command {
-  public TalonArmMoveUpCmd() {
-    requires(Robot.encodedArmTalon);
+public class GrabBallCmd extends Command {
+  public GrabBallCmd() {
+    requires(Robot.intake);
   }
 
   // Called just before this Command runs the first time
@@ -23,7 +23,7 @@ public class TalonArmMoveUpCmd extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.encodedArmTalon.Up();
+    Robot.intake.grabIntake();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -35,7 +35,7 @@ public class TalonArmMoveUpCmd extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.encodedArmTalon.Stop();
+    Robot.intake.stopIntake();
   }
 
   // Called when another command which requires one or more of the same

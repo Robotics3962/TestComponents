@@ -10,34 +10,36 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class TalonWristMoveUpCmd extends Command {
-  public TalonWristMoveUpCmd() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.encodedWristTalon);
+public class ElevatorPIDMoveCmd extends Command {
+    private double targetPos;
+
+  public ElevatorPIDMoveCmd(double pos) {
+    requires(Robot.pidElevator);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.pidElevator.setPIDPosition(targetPos);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.encodedWristTalon.Up();
+    Robot.pidElevator.setPIDPosition(targetPos);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    boolean done = Robot.pidElevator.onTarget();
+    Robot.Log("Elevator PidMove done:" + done);
+    return done;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.encodedWristTalon.Stop();
   }
 
   // Called when another command which requires one or more of the same

@@ -23,7 +23,6 @@ public class TalonWristPIDMove extends Command {
   @Override
   protected void initialize() {
   Robot.encodedWristTalon.setPIDPosition(positionToMoveTo);
-  Robot.encodedWristTalon.move();
   Robot.Log("Wrist TalonPidMove: initialized");
   }
 
