@@ -19,7 +19,6 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import org.junit.Test.None;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX; 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -228,8 +227,8 @@ public class TalonEncodedWrist extends Subsystem {
       else {
         motor1.set(ControlMode.Position, targetPosition);
       }
+      LogInfo(true);
     }
-    LogInfo(true);
   }
 
   public boolean onTarget(){
