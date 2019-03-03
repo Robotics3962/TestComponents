@@ -9,21 +9,19 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.TalonEncodedArm;
+import frc.robot.RobotMap;
 
-public class TalonArmPIDMove extends Command {
-  private double positionToMoveTo;
-
-  public TalonArmPIDMove(double pos) {
-    requires(Robot.encodedArmTalon);
-    positionToMoveTo = pos;
+public class ElevatorPidMoveUpCmd extends Command {
+  double targetPosition;
+  public ElevatorPidMoveUpCmd() {
+    requires(Robot.pidElevator);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.encodedArmTalon.setPIDPosition(positionToMoveTo);
-    Robot.Log("Arm TalonPidMove: initialized");
+    double newPos = Robot.pidElevator.getCurrentPosition() + RobotMap.ElevatorUpPidDelta;
+    Robot.pidElevator.setPIDPosition(newPos);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -34,12 +32,7 @@ public class TalonArmPIDMove extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    // if the parameters are not set correctly, 
-    // the arm position may never get to the targetPosition
-    // and onTarget will never return true
-    boolean done = Robot.encodedArmTalon.onTarget();
-    Robot.Log("Arm TalonPidMove done:" + done);
-    return done;
+    return false;
   }
 
   // Called once after isFinished returns true
@@ -51,6 +44,5 @@ public class TalonArmPIDMove extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }

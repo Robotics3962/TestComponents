@@ -92,6 +92,9 @@ public class Robot extends TimedRobot {
       case Encoder:
         encoderTest = new EncoderTest();
         break;
+      case ElevatorPid:
+        pidElevator = new PIDElevator();
+        break;
     }
 
     // call control loop

@@ -22,9 +22,9 @@ public class TalonWristPIDMove extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-  Robot.encodedWristTalon.setPIDPosition(positionToMoveTo);
-  Robot.encodedWristTalon.move();
-  Robot.Log("Wrist TalonPidMove: initialized");
+    Robot.encodedWristTalon.setPIDPosition(positionToMoveTo);
+    Robot.encodedWristTalon.move();
+    Robot.Log("Wrist TalonPidMove: initialized");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -35,6 +35,9 @@ public class TalonWristPIDMove extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    // if the parameters are not set correctly, 
+    // the arm position may never get to the targetPosition
+    // and onTarget will never return true
     boolean done = Robot.encodedWristTalon.onTarget();
     Robot.Log("Wrist TalonPidMove done:" + done);
     return done;

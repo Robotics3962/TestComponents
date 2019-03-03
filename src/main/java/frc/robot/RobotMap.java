@@ -17,9 +17,9 @@ public class RobotMap {
 
   // indicate what we want to test
   public static enum TestModule {
-    LimitSwitch,Elevator,Wrist,Arm,Encoder,Custom
+    LimitSwitch,Elevator,ElevatorPid,Wrist,Arm,Encoder,Custom
   }
-  public static TestModule testModule = TestModule.Encoder  ;//change to whatever you want to test meaning (TestModule.Elevator)
+  public static TestModule testModule = TestModule.Elevator;//change to whatever you want to test meaning (TestModule.Elevator)
 
   // These are PIO ids
 
@@ -115,6 +115,8 @@ public class RobotMap {
   public static final double ElevatorMinOutput = -.5;
   public static final double ElevatorMaxOutput = .5;
   public static final double ElevatorAbsTolerance = 5;
+  public static final double ElevatorDownPidDelta = -1;
+  public static final double ElevatorUpPidDelta = 1;
 
   // Joystick to use
   public static final int JoystickId = 0;
