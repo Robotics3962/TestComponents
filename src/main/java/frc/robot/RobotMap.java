@@ -82,10 +82,10 @@ public class RobotMap {
   public static final double TalonArmPID_I = 0.0;
   public static final double TalonArmPID_D = 0.0;
   public static final double TalonArmPID_F = 0.0;
-  public static final double TalonArmMaxUpPosition = 3000; // this needs empirically set
+  public static final double TalonArmMaxUpPosition = 500; // this needs empirically set
   public static final double TalonArmMaxDownPosition = 0; // this needs empirically set
 
-  //wrist
+  //wrist 
   public static final double TalonWristUpSpeed = -.6;
   public static final double TalonWristUpPidDelta = -20; // match sign of upspeed
   public static final double TalonWristDownSpeed = .6;
@@ -98,8 +98,8 @@ public class RobotMap {
   public static final double TalonWristPID_I = 0.0;
   public static final double TalonWristPID_D = 0.0;
   public static final double TalonWristPID_F = 0.0;
-  public static final double TalonWristMaxUpPosition = 3000; // this needs empirically set
-  public static final double TalonWristMaxDownPosition = 0; // this needs empirically set
+  public static final double TalonWristMaxUpPosition = 0; // this needs empirically set
+  public static final double TalonWristMaxDownPosition = -500; // this needs empirically set
 
   // test elevator values
   public static final int SparkElevator = 5;
