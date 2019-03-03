@@ -19,7 +19,7 @@ public class RobotMap {
   public static enum TestModule {
     LimitSwitch,Elevator,Wrist,Arm,Encoder,Custom
   }
-  public static TestModule testModule = TestModule.Elevator;//change to whatever you want to test meaning (TestModule.Elevator)
+  public static TestModule testModule = TestModule.Encoder  ;//change to whatever you want to test meaning (TestModule.Elevator)
 
   // These are PIO ids
 
@@ -49,9 +49,9 @@ public class RobotMap {
   public static final double TalonMaxOutput = 0.5;
 
   //wrist
-  public static final double TalonUpSpeed = -.5;
+  public static final double TalonUpSpeed = -.3;
   public static final double TalonUpPidDelta = -20; // match sign of upspeed
-  public static final double TalonDownSpeed = .5;
+  public static final double TalonDownSpeed = .3;
   public static final double TalonDownPidDelta = 20; // match sign of down speed
   public static final double TalonStopSpeed = .001;
   public static final double TalonAbsTolerance = 5;
@@ -64,10 +64,10 @@ public class RobotMap {
 
 
   //arm
-  public static final double TalonArmUpSpeed = -.6;
-  public static final double TalonArmUpPidDelta = -20; // match sign of upspeed
-  public static final double TalonArmDownSpeed = .6;
-  public static final double TalonArmDownPidDelta = 20; // match sign of down speed
+  public static final double TalonArmUpSpeed = .2;
+  public static final double TalonArmUpPidDelta = 20; // match sign of upspeed
+  public static final double TalonArmDownSpeed = -.2;
+  public static final double TalonArmDownPidDelta = -20; // match sign of down speed
   public static final double TalonSrmStopSpeed = .001;
   public static final double TalonArmAbsTolerance = 5;
   public static final int    TalonArmCruiseSpeed = 15000;
@@ -78,9 +78,9 @@ public class RobotMap {
   public static final double TalonArmPID_F = 0.0;
 
   //wrist
-  public static final double TalonWristUpSpeed = -.5;
+  public static final double TalonWristUpSpeed = -.6;
   public static final double TalonWristUpPidDelta = -20; // match sign of upspeed
-  public static final double TalonWristDownSpeed = .5;
+  public static final double TalonWristDownSpeed = .6;
   public static final double TalonWristDownPidDelta = 20; // match sign of down speed
   public static final double TalonWristStopSpeed = .001;
   public static final double TalonWristAbsTolerance = 5;
@@ -93,8 +93,8 @@ public class RobotMap {
 
   // test elevator values
   public static final int SparkElevator = 5;
-  public static final double ElevatorUpSpeed = -.4;
-  public static final double ElevatorDownSpeed = .4;
+  public static final double ElevatorUpSpeed = .4;
+  public static final double ElevatorDownSpeed = -.4;
   public static final double ElevatorStopSpeed = .001;
   public static final double ElevatorPID_P = 0.001;
   public static final double ElevatorPID_I = 0.0;
