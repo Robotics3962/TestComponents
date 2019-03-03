@@ -7,18 +7,20 @@
 
 package frc.robot.commands;
 
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
+import frc.robot.subsystems.TalonEncodedArm;
 
-public class ResetElevatorEncoderCmd extends Command {
-  public ResetElevatorEncoderCmd() {
-    requires(Robot.elevatorTest);
+public class ResetTalonEncoderCmd extends Command {
+  public ResetTalonEncoderCmd() {
+    requires(Robot.encodedTalon);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.elevatorTest.resetEncoder();
+    Robot.encodedTalon.resetEncoder();
+    Robot.Log("TalonEncoderResetCommand: reset started");
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -29,7 +31,9 @@ public class ResetElevatorEncoderCmd extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    boolean done = Robot.encodedWristTalon.encoderResetComplete();
+    Robot.Log("TalonEncoderResetCommand: reset finished:" + done);
+    return done;
   }
 
   // Called once after isFinished returns true

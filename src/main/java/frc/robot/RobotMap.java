@@ -45,10 +45,6 @@ public class RobotMap {
   public static final int TalonMotorCanId2 = 7;
   public static final int TalonMotorCanID3 = 6;
   public static final int TalonMotorCanID4 = 5;
-  public static final int TalonDriveLeftFront = 2;
-  public static final int TalonDriveLeftBack = 3;
-  public static final int TalonDriveRightFront = 1;
-  public static final int TalonDriveRightRear = 4;
   public static final double TalonMinOutput = -0.5;
   public static final double TalonMaxOutput = 0.5;
 
@@ -96,11 +92,9 @@ public class RobotMap {
   public static final double TalonWristPID_F = 0.0;
 
   // test elevator values
-  public static final int SparkElevatorId = 5;
-  public static final double ElevatorUpSpeed = 0.4;
-  public static final double ElevatorUpPidDelta = 0.5; // match sign of up speed
-  public static final double ElevatorDownSpeed = -0.4;
-  public static final double ElevatorDownPidDelta = -0.5; // match sign of down speed
+  public static final int SparkElevator = 5;
+  public static final double ElevatorUpSpeed = .4;
+  public static final double ElevatorDownSpeed = -.4;
   public static final double ElevatorStopSpeed = .001;
   public static final double ElevatorPID_P = 0.001;
   public static final double ElevatorPID_I = 0.0;
@@ -112,15 +106,8 @@ public class RobotMap {
   public static final double ElevatorMaxOutput = .5;
   public static final double ElevatorAbsTolerance = 5;
 
-  // intake values
-  public static final int SparkIntakeId = 4;
-  public static final double IntakeIngressSpeed = -0.3;
-  public static final double IntakeEgressSpeed = 0.8;
-  public static final double IntakeStopSpeed = .001;
-
   // Joystick to use
-  public static final int Joystick0Id = 0;
-  public static final int Joystick1Id = 1;
+  public static final int JoystickId = 0;
 
   // these are controller button ids (on joystick)
   public static final int JoystickButtonA = 1;
@@ -129,60 +116,14 @@ public class RobotMap {
   public static final int JoystickButtonY = 4;
   public static final int JoystickButtonShoulderLeft = 5;
   public static final int JoystickButtonShoulderRight = 6;
-  public static final int JoystickButtonBack = 7;
-  public static final int JoystickButtonStart = 8;
-  
-  // joystick axis mapping
-  public static final int JoystickAxisSpeed = 0;
-  public static final int JoystickAxisRotation = 1;
-  public static final double JoystickDeadZone = 0.05;
 
-  // these values are used to expand (value > 1)
-  // keep the identity (value == 1) or reduce
-  // (value < 1) the max and min speed the joystick
-  // moves the robot  
-  public static final double SpeedScaleFactor = 0.65;
-  public static final double RotationScaleFactor = 0.45;
+
+  // joystick axis mapping
+  public static final int XboxController_Speed = 0;
+  public static final int XboxController_Rotation = 1;
+  
+  public static final double JoystickDeadZone = 0.05;
 
   // this is used to make the encoder phase check less sensitive
   public static final double EncoderSlop = 1;
-
-  // position of elevator,arm and wrist to grab a ball
-  public static final int    GrabBallPosIndex = 0;
-  public static final double GrabBallElevatorPos = 10;
-  public static final double GrabBallArmPos = 100;
-  public static final double GrabBallWristPos = 100;
-
-  // position of elevator,arm stow position
-  public static final int    StowPosIndex = 1;
-  public static final double StowBallElevatorPos = 20;
-  public static final double StowBallArmPos = 200;
-  public static final double StowBallWristPos = 200;
-  
-  // position of elevator,arm to put in low hole
-  public static final int    LowBallPosIndex = 2;
-  public static final double LowBallElevatorPos = 30;
-  public static final double LowBallArmPos = 200;
-  public static final double LowBallWristPos = 200;
-
-  // position of elevator,arm to put in middle hole
-  public static final int    MiddleBallPosIndex = 3;
-  public static final double MiddleBallElevatorPos = 30;
-  public static final double MiddleBallArmPos = 200;
-  public static final double MiddleBallWristPos = 200;
-  
-  // position of elevator,arm to put in high hole
-  public static final int    HighBallPosIndex = 4;
-  public static final double HighBallElevatorPos = 30;
-  public static final double HighBallArmPos = 200;
-  public static final double HighBallWristPos = 200;
-
-  // position of elevator,arm carry ball
-  public static final int    CarryBallPosIndex = 5;
-  public static final double CarryBallElevatorPos = 30;
-  public static final double CarryBallArmPos = 200;
-  public static final double CarryBallWristPos = 200;
-
-  public static final int    MaxBallPosIndex = 6;
-
 }

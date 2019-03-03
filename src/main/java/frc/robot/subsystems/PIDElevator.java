@@ -39,7 +39,7 @@ public class PIDElevator extends PIDSubsystem {
   public PIDElevator(){
     super("PIDElevator", RobotMap.ElevatorPID_P, RobotMap.ElevatorPID_I, RobotMap.ElevatorPID_D, RobotMap.ElevatorPID_F);
 
-    motor1 = new Spark(RobotMap.SparkElevatorId);
+    motor1 = new Spark(RobotMap.SparkElevator);
 
     // enable the encoders and limit switches
     useLimitSwitches = true;
@@ -77,7 +77,7 @@ public class PIDElevator extends PIDSubsystem {
     setDefaultCommand(new ElevatorHoldCmd());
   }
 
-  public double getTargetPosition(){
+  public double getSetPosition(){
     return targetPosition;
   }
 

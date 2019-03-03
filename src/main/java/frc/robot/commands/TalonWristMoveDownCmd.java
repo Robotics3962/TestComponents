@@ -7,34 +7,37 @@
 
 package frc.robot.commands;
 
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
-public class ResetElevatorEncoderCmd extends Command {
-  public ResetElevatorEncoderCmd() {
-    requires(Robot.elevatorTest);
+public class TalonWristMoveDownCmd extends Command {
+  public TalonWristMoveDownCmd() {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    requires(Robot.encodedWristTalon);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.elevatorTest.resetEncoder();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.encodedWristTalon.Down();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.encodedWristTalon.Stop();
   }
 
   // Called when another command which requires one or more of the same

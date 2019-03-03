@@ -7,29 +7,35 @@
 
 package frc.robot.commands;
 
-import frc.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 
-public class ResetElevatorEncoderCmd extends Command {
-  public ResetElevatorEncoderCmd() {
-    requires(Robot.elevatorTest);
+public class EncoderTestCmd extends Command {
+  private int count = 0;
+
+  public EncoderTestCmd() {
+    requires(Robot.encoderTest);
+    Robot.encoderTest.resetEncoder();
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.elevatorTest.resetEncoder();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if( (count % 10) == 0) {
+      Robot.encoderTest.LogValues();
+    }
+    count++;
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true
