@@ -35,6 +35,12 @@ public class RobotMap {
   
   public static final int ElevatorTopLimitSwitchId = 0;
   public static final int ElevatorBottomLimitSwitchId = 1;
+
+  public static final int ArmTopLimitSwitchId = 2;
+  public static final int ArmBottomLimitSwitchId = 3;
+
+  public static final int WristTopLimitSwitchId = 4;
+  public static final int WristBottomLimitSwitchId = 5;
   
   // these are PWM ids
   public static final int SparkMotorId1 = 5;
@@ -76,6 +82,8 @@ public class RobotMap {
   public static final double TalonArmPID_I = 0.0;
   public static final double TalonArmPID_D = 0.0;
   public static final double TalonArmPID_F = 0.0;
+  public static final double TalonArmMaxUpPosition = 3000; // this needs empirically set
+  public static final double TalonArmMaxDownPosition = 0; // this needs empirically set
 
   //wrist
   public static final double TalonWristUpSpeed = -.6;
@@ -90,6 +98,8 @@ public class RobotMap {
   public static final double TalonWristPID_I = 0.0;
   public static final double TalonWristPID_D = 0.0;
   public static final double TalonWristPID_F = 0.0;
+  public static final double TalonWristMaxUpPosition = 3000; // this needs empirically set
+  public static final double TalonWristMaxDownPosition = 0; // this needs empirically set
 
   // test elevator values
   public static final int SparkElevator = 5;

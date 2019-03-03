@@ -35,8 +35,6 @@ public class TalonEncodedArm extends Subsystem {
 
   private WPI_TalonSRX motor1;
   private WPI_TalonSRX motor2;
-  //private TalonSRX motor1;
-  //private TalonSRX motor2;
   private double targetPosition;
   private double velocity;
   private boolean encodersAreEnabled = false;
@@ -44,7 +42,7 @@ public class TalonEncodedArm extends Subsystem {
   private boolean manualOverride = true;
   private int count = 0;
   private int logMsgInterval = 1;
-
+  
   // set to false to use position, set to true to
   // use motion magic.  girls of steel uses motion magic for
   // what looks to be an elevator, but not for what looks
@@ -69,8 +67,6 @@ public class TalonEncodedArm extends Subsystem {
     // assume that motor1 is connected to encoder
     motor1 = new WPI_TalonSRX(RobotMap.TalonMotorCanId1);
     motor2= new WPI_TalonSRX(RobotMap.TalonMotorCanId2); 
-    //motor1 = new TalonSRX(RobotMap.TalonMotorCanId1);
-    //motor2= new TalonSRX(RobotMap.TalonMotorCanId2); 
    
     motor1.configFactoryDefault();
     motor2.configFactoryDefault();
@@ -90,6 +86,11 @@ public class TalonEncodedArm extends Subsystem {
     // how it is confgured
     motor1.setInverted(false);
     motor2.setInverted(false);
+
+    if(limitSwAreEnabled){
+      topLimit = new DigitalInput(RobotMap.ArmTopLimitSwitchId);
+      bottomLimit = new DigitalInput(RobotMap.ArmBottomLimitSwitchId);
+    }
 
     if (encodersAreEnabled) {
       // init code pulled from https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/MotionMagic/src/main/java/frc/robot/Robot.java
@@ -125,14 +126,14 @@ public class TalonEncodedArm extends Subsystem {
         motor1.configMotionAcceleration(RobotMap.TalonArmAcceleration, ENCODER_CONFIG_TIMEOUT);
       }
 
-		  /* Zero the sensor */
+      /* Zero the sensor */
       motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_CONFIG_TIMEOUT);
     }
 
     motor1.setNeutralMode(NeutralMode.Brake);
     motor2.setNeutralMode(NeutralMode.Brake);
 
-    Robot.Log("Talon is initialized");
+    Robot.Log("Arm Talon is initialized");
   }
 
   public void setPIDPosition(double pos) {
@@ -170,7 +171,7 @@ public class TalonEncodedArm extends Subsystem {
     // because it is done asynchronously. Have a command call encoderResetComplete()
     // until it returns true 
     motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_RESET_TIMEOUT);
-    Robot.Log("talon encoders reset");
+    Robot.Log("arm talon encoders reset");
     return true;
   }
 
@@ -250,13 +251,31 @@ public class TalonEncodedArm extends Subsystem {
   }
 
   public boolean atUpperLimit(){
-    //return topLimit.get();
-    return false;
+    // assume we are not at limit until proven otherwise
+    boolean atLimit = false;
+    if(limitSwAreEnabled){
+        atLimit = topLimit.get();
+    }
+    else{
+      if( getCurrentPosition()>= RobotMap.TalonArmMaxUpPosition){
+        atLimit = true;
+      }
+    }
+    return atLimit;
   }
 
   public boolean atLowerLimit() {
-   // return bottomLimit.get();
-      return false;
+    // assume we are not at limit until proven otherwise
+    boolean atLimit = false;
+    if(limitSwAreEnabled){
+        atLimit = bottomLimit.get();
+    }
+    else{
+      if( getCurrentPosition()<= RobotMap.TalonArmMaxDownPosition){
+        atLimit = true;
+      }
+    }
+    return atLimit;
   }
 
   public void dumpLimitSwitchValues(){

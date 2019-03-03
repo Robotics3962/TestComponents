@@ -41,8 +41,6 @@ public class TalonEncodedWrist extends Subsystem {
 
   private WPI_TalonSRX motor1;
   private WPI_TalonSRX motor2;
-//  private TalonSRX motor1;
-//  private TalonSRX motor2;
 
   private double targetPosition;
   private double velocity;
@@ -75,8 +73,6 @@ public class TalonEncodedWrist extends Subsystem {
 
     // assume that motor1 is connected to encoder
     
-//    motor1 = new TalonSRX(RobotMap.TalonMotorCanID3);
-//    motor2 = new TalonSRX(RobotMap.TalonMotorCanID4);
     motor1 = new WPI_TalonSRX(RobotMap.TalonMotorCanID3);
     motor2 = new WPI_TalonSRX(RobotMap.TalonMotorCanID4);
 
@@ -97,6 +93,11 @@ public class TalonEncodedWrist extends Subsystem {
     // how it is confgured
     motor1.setInverted(false);
     motor2.setInverted(false);
+
+    if(limitSwAreEnabled){
+      topLimit = new DigitalInput(RobotMap.WristTopLimitSwitchId);
+      bottomLimit = new DigitalInput(RobotMap.WristBottomLimitSwitchId);
+    }
 
     if (encodersAreEnabled) {
       // init code pulled from https://github.com/CrossTheRoadElec/Phoenix-Examples-Languages/blob/master/Java/MotionMagic/src/main/java/frc/robot/Robot.java
@@ -249,14 +250,31 @@ public class TalonEncodedWrist extends Subsystem {
   }
 
   public boolean atUpperLimit(){
-    //return topLimit.get();
-    return false;
+    // assume we are not at limit until proven otherwise
+    boolean atLimit = false;
+    if(limitSwAreEnabled){
+        atLimit = topLimit.get();
+    }
+    else{
+      if( getCurrentPosition()>= RobotMap.TalonWristMaxUpPosition){
+        atLimit = true;
+      }
+    }
+    return atLimit;
   }
 
   public boolean atLowerLimit() {
-   // return bottomLimit.get();
-      return false;
-
+    // assume we are not at limit until proven otherwise
+    boolean atLimit = false;
+    if(limitSwAreEnabled){
+        atLimit = bottomLimit.get();
+    }
+    else{
+      if( getCurrentPosition()<= RobotMap.TalonWristMaxDownPosition){
+        atLimit = true;
+      }
+    }
+    return atLimit;
   }
 
   public void dumpLimitSwitchValues(){
