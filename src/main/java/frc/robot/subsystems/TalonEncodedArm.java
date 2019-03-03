@@ -43,7 +43,7 @@ public class TalonEncodedArm extends Subsystem {
   private boolean limitSwAreEnabled = false;
   private boolean manualOverride = true;
   private int count = 0;
-  private int logMsgInterval = 5;
+  private int logMsgInterval = 1;
 
   // set to false to use position, set to true to
   // use motion magic.  girls of steel uses motion magic for
@@ -101,7 +101,7 @@ public class TalonEncodedArm extends Subsystem {
           PRIMARY_ENCODER_IDX, 
           ENCODER_CONFIG_TIMEOUT);
 
-      motor1.setSensorPhase(true);
+      motor1.setSensorPhase(false);
 
       /* Set relevant frame periods to be at least as fast as periodic rate */
       /* DJD I don't know what this does                                    */
@@ -224,9 +224,8 @@ public class TalonEncodedArm extends Subsystem {
       else {
         motor1.set(ControlMode.Position, targetPosition);
       }
+      LogInfo(true);
     }
-
-    LogInfo(true);
   }
 
   public boolean onTarget(){
@@ -243,7 +242,6 @@ public class TalonEncodedArm extends Subsystem {
     aboveRange = curpos > (targetPosition + RobotMap.TalonArmAbsTolerance);
 
     reachedTarget = ((!belowRange) && (!aboveRange));
-    Robot.Log("OnTarget:" + reachedTarget + " (" + belowRange + "," + aboveRange + ")");
     return reachedTarget;
   }
 
@@ -297,7 +295,7 @@ public class TalonEncodedArm extends Subsystem {
     if( check && (Math.abs(deltaPos) > RobotMap.EncoderSlop) ){
       double deltaPosSign = Math.copySign(1, deltaPos);
       if( deltaPosSign != sign){
-        Robot.Log("Arm encoder is out of Phase from Arm Motor");
+        Robot.Log("Arm encoder is out of Phase from Arm Motor dir:" + dirMoved + " deltapos:" + deltaPos);
         Robot.die();
       }
     }
