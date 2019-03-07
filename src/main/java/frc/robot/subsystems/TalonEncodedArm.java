@@ -265,11 +265,15 @@ public class TalonEncodedArm extends Subsystem {
     if(limitSwAreEnabled){
         atLimit = topLimit.get();
     }
-    else{
+    else if(encodersAreEnabled){
       if( getCurrentPosition()>= RobotMap.TalonArmMaxUpPosition){
         atLimit = true;
       }
     }
+    else{
+      atLimit = false;
+    }
+    
     return atLimit;
   }
 
@@ -279,11 +283,15 @@ public class TalonEncodedArm extends Subsystem {
     if(limitSwAreEnabled){
         atLimit = bottomLimit.get();
     }
-    else{
+    else if(encodersAreEnabled){
       if( getCurrentPosition()<= RobotMap.TalonArmMaxDownPosition){
         atLimit = true;
       }
     }
+    else{
+      atLimit = false;
+    }
+
     return atLimit;
   }
 

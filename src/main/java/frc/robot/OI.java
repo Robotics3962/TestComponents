@@ -24,6 +24,8 @@ import frc.robot.commands.ResetElevatorEncoderCmd;
 import frc.robot.commands.ElevatorPidMoveUpCmd;
 import frc.robot.commands.ElevatorPidMoveCmd;
 import frc.robot.commands.ElevatorPidMoveDownCmd;
+import frc.robot.commands.ShootBallCmd;
+import frc.robot.commands.GrabBallCmd;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -84,6 +86,9 @@ public class OI {
         buttonB.whenPressed(new ElevatorPidMoveUpCmd());
         buttonY.whenPressed(new ElevatorPidMoveCmd(10));
         break;
+      case Intake:
+        buttonA.whileHeld(new GrabBallCmd());
+        buttonB.whileHeld(new ShootBallCmd());
     }
   }
 }

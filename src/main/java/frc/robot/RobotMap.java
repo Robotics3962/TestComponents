@@ -17,9 +17,9 @@ public class RobotMap {
 
   // indicate what we want to test
   public static enum TestModule {
-    LimitSwitch,Elevator,ElevatorPid,Wrist,Arm,Encoder,Custom
+    LimitSwitch,Elevator,ElevatorPid,Intake,Wrist,Arm,Encoder,Custom
   }
-  public static TestModule testModule = TestModule.Elevator;//change to whatever you want to test meaning (TestModule.Elevator)
+  public static TestModule testModule = TestModule.Arm;//change to whatever you want to test meaning (TestModule.Elevator)
 
   // These are PIO ids
 
@@ -42,6 +42,9 @@ public class RobotMap {
   public static final int WristTopLimitSwitchId = 4;
   public static final int WristBottomLimitSwitchId = 5;
   
+  //Sparks
+  public static final int IntakeSparkId1 = 4;
+
   // these are PWM ids
   public static final int SparkMotorId1 = 5;
   public static final int SparkMotorId2 = 6;
@@ -70,7 +73,7 @@ public class RobotMap {
 
 
   //arm
-  public static final double TalonArmUpSpeed = .2;
+  public static final double TalonArmUpSpeed = .4;
   public static final double TalonArmUpPidDelta = 20; // match sign of upspeed
   public static final double TalonArmDownSpeed = -.2;
   public static final double TalonArmDownPidDelta = -20; // match sign of down speed
@@ -103,8 +106,8 @@ public class RobotMap {
 
   // test elevator values
   public static final int SparkElevator = 5;
-  public static final double ElevatorUpSpeed = .4;
-  public static final double ElevatorDownSpeed = -.4;
+  public static final double ElevatorUpSpeed = .3;
+  public static final double ElevatorDownSpeed = -.1;
   public static final double ElevatorStopSpeed = .001;
   public static final double ElevatorPID_P = 0.001;
   public static final double ElevatorPID_I = 0.0;
@@ -117,6 +120,10 @@ public class RobotMap {
   public static final double ElevatorAbsTolerance = 5;
   public static final double ElevatorDownPidDelta = -1;
   public static final double ElevatorUpPidDelta = 1;
+
+  //Intake speed and shoot speed
+  public static final double GrabSpeed = -0.3;
+  public static final double ShootSpeed = 0.9;
 
   // Joystick to use
   public static final int JoystickId = 0;

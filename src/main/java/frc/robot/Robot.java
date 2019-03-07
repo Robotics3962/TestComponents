@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.LimitSwitchTest;
 import frc.robot.subsystems.ElevatorTest;
 import frc.robot.subsystems.EncoderTest;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.TalonEncodedArm;
 import frc.robot.subsystems.TalonEncodedWrist;
 import frc.robot.subsystems.TalonEncoded;
@@ -46,6 +47,7 @@ public class Robot extends TimedRobot {
   public static double targetWristPosition = 0;
   public static double targetArmPosition = 0;
   public static double targetElevatorPosition = 0;
+  public static Intake intake = null;
   
   public static void Log(String msg){
     System.out.println(msg);
@@ -94,6 +96,9 @@ public class Robot extends TimedRobot {
         break;
       case ElevatorPid:
         pidElevator = new PIDElevator();
+        break;
+      case Intake:
+        intake = new Intake();
         break;
     }
 
