@@ -41,8 +41,8 @@ public class TalonEncodedArm extends Subsystem {
   private boolean limitSwAreEnabled = false;
   private boolean manualOverride = true;
   private int count = 0;
-  private int logMsgInterval = 1;
-  
+  private int logMsgInterval = 5;
+
   // set to false to use position, set to true to
   // use motion magic.  girls of steel uses motion magic for
   // what looks to be an elevator, but not for what looks
@@ -58,7 +58,7 @@ public class TalonEncodedArm extends Subsystem {
   private DigitalInput bottomLimit = null; //new DigitalInput(RobotMap.LimitSwitchPIOId3);
 
   public TalonEncodedArm() {
-    encodersAreEnabled = true;
+    encodersAreEnabled = false;
     limitSwAreEnabled = false;
 
     targetPosition = 0;
@@ -126,7 +126,7 @@ public class TalonEncodedArm extends Subsystem {
         motor1.configMotionAcceleration(RobotMap.TalonArmAcceleration, ENCODER_CONFIG_TIMEOUT);
       }
 
-      /* Zero the sensor */
+		  /* Zero the sensor */
       motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_CONFIG_TIMEOUT);
     }
 
@@ -171,7 +171,12 @@ public class TalonEncodedArm extends Subsystem {
     // because it is done asynchronously. Have a command call encoderResetComplete()
     // until it returns true 
     motor1.setSelectedSensorPosition(PRIMARY_ENCODER_IDX, ENCODER_RESET_POSTION, ENCODER_RESET_TIMEOUT);
-    Robot.Log("arm talon encoders reset");
+
+    // set the target position to 0 so we don't move the arm to some
+    // out of bounds place
+    targetPosition  = 0;
+
+    Robot.Log("Arm talon encoders reset");
     return true;
   }
 
@@ -205,11 +210,9 @@ public class TalonEncodedArm extends Subsystem {
   }
 
   public void holdPosition(){
-    if(!encodersAreEnabled){
-      Robot.die();
+    if(encodersAreEnabled){
+      move();
     }
-    
-    move();
   }
 
   public void move(){
@@ -227,7 +230,6 @@ public class TalonEncodedArm extends Subsystem {
         Robot.Log("Arm is at Limits: bottom:" + atLowerLimit() + " upper:" + atUpperLimit());
         targetPosition = getCurrentPosition();
       }
-
       if(useMotionMagic){
         motor1.set(ControlMode.MotionMagic, targetPosition);
       }
@@ -260,44 +262,22 @@ public class TalonEncodedArm extends Subsystem {
   }
 
   public boolean atUpperLimit(){
-    // assume we are not at limit until proven otherwise
     boolean atLimit = false;
     if(limitSwAreEnabled){
-        atLimit = topLimit.get();
+      atLimit = topLimit.get();
     }
-    else if(encodersAreEnabled){
-      if( getCurrentPosition()>= RobotMap.TalonArmMaxUpPosition){
-        atLimit = true;
-      }
-    }
-    else{
-      atLimit = false;
+
+    return atLimit;
+  }
+
+  public boolean atLowerLimit() {
+    boolean atLimit = false;
+    if(limitSwAreEnabled){
+      atLimit = bottomLimit.get();
     }
     
     return atLimit;
   }
-
-  public boolean atLowerLimit() {
-    // assume we are not at limit until proven otherwise
-    boolean atLimit = false;
-    if(limitSwAreEnabled){
-        atLimit = bottomLimit.get();
-    }
-    else if(encodersAreEnabled){
-      if( getCurrentPosition()<= RobotMap.TalonArmMaxDownPosition){
-        atLimit = true;
-      }
-    }
-    else{
-      atLimit = false;
-    }
-
-    return atLimit;
-  }
-
-  public void dumpLimitSwitchValues(){
-    Robot.Log("talon: atLowerLimit:" + atLowerLimit() + " atUpperLimit:" + atUpperLimit());
-  }  
 
   // make sure the motor and encoder are in phase.  This means that
   // when we move the motor with a negative speed, the encoder
@@ -312,7 +292,7 @@ public class TalonEncodedArm extends Subsystem {
     // as prev and curr position are not set
     // correctly and could flag a false positive
     // or a false negative
-    if(!manualOverride){
+    if(!manualOverride || !encodersAreEnabled){
       return;
     }
 
@@ -354,7 +334,7 @@ public class TalonEncodedArm extends Subsystem {
 
   public void Up(){
     if (atUpperLimit()){
-      stop();
+      Stop();
     }
     else {
       VerifyEncoderPhase(pastPosition);
@@ -366,7 +346,7 @@ public class TalonEncodedArm extends Subsystem {
 
   public void Down(){
     if (atLowerLimit()){
-      stop();
+      Stop();
     }
     else {
       VerifyEncoderPhase(pastPosition);
@@ -381,6 +361,7 @@ public class TalonEncodedArm extends Subsystem {
     // or call motor1.stopMotor()
     stop();
   }
+
   public void LogInfo(boolean dampen){
     count++;
 
@@ -388,14 +369,21 @@ public class TalonEncodedArm extends Subsystem {
       return;
     }
     
-    double currPos = getCurrentPosition();
-
-    String output = "Arm   Info: manual:" + manualOverride;
+    double currPos = -1;
+    boolean atTarget = false;
+    if(encodersAreEnabled){
+      currPos = getCurrentPosition();
+      atTarget = onTarget();
+    }
+  
+    String output = "Wrist Info: manual:" + manualOverride;
     output = output + " target:" + targetPosition;
     output = output + " current:" + currPos;
-    output = output + " ontarg:" + onTarget();
+    output = output + " ontarg:" + atTarget;
     output = output + " dir:" + dirMoved;
     output = output + " speed:" + velocity;
+    output = output + " upLimit:" + atUpperLimit();
+    output = output + " boLimit:" + atLowerLimit();
     Robot.Log(output);
   }
 }
